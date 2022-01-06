@@ -5,18 +5,17 @@ class Solution {
             sum += num;
             maxNum = Math.max(num, maxNum);
         }
-        int l = maxNum, r = sum +1;
-        int res = 0;
+        int l = maxNum, r = sum;
         while( l < r) {
-            int mid = l + (r - l) / 2;
+            int mid = (r + l) / 2;
             if(getMinSum(nums, mid) <= m) {//注意：如果 minSum 值大， 区分的区间就变少，所以应该缩小minSum
-                r = mid;
-                res = mid;
+                r= mid;
             }
             else
                 l = mid + 1;
         }
-        return res;
+        
+        return l;
     }
     public int getMinSum(int[] nums, int mid) {
         int cnt = 0;
