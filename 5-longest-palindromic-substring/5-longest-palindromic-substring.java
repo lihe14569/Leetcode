@@ -1,24 +1,19 @@
 class Solution {
     public String longestPalindrome(String s) {
-        if(s == null || s.length() == 0) return "";
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
         int l = 0, r = 0;
-        for(int i = 0; i < s.length(); i++) {
-            int odd = findPanlindrome(s, i, i);
-            int even = findPanlindrome(s, i, i + 1);
-            int currMax = Math.max(odd, even);
-            if( currMax > r - l) {
-                l = i - (currMax - 1) / 2;
-                r = i + currMax / 2;
+        for(int i = n - 1; i >= 0; i--) {
+            for(int j = i; j < n; j++) {
+                if((s.charAt(i) == s.charAt(j)) && (j - i <= 2 || dp[i + 1][j - 1])) {
+                    if(j - i > r - l) {
+                        l = i;
+                        r = j;
+                    }
+                    dp[i][j] = true;
+                }
             }
         }
         return s.substring(l, r + 1);
-    }
-    public int findPanlindrome(String s, int l, int r) {
-        int left = l, right = r;
-        while( left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-            left--;
-            right++;
-        }
-        return right - left -1;
     }
 }
