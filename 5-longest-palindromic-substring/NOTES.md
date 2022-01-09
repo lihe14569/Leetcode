@@ -1,13 +1,15 @@
+方法一： 中心扩展法
 ```
 public String longestPalindrome(String s) {
-int l = 0, r = 0, max = 0;
+if(s == null || s.length() == 0) return "";
+int l = 0, r = 0;
 for(int i = 0; i < s.length(); i++) {
 int odd = findPanlindrome(s, i, i);
 int even = findPanlindrome(s, i, i + 1);
-int currMax = Math.max(odd, even);
-if( currMax > r - l) {
-l = i - (max - 1) / 2;
-r = i + max / 2;
+int len = Math.max(odd, even);
+if( len > r - l) {
+l = i - (len - 1) / 2;
+r = i + len / 2;
 }
 }
 return s.substring(l, r + 1);
@@ -21,3 +23,6 @@ right++;
 return right - left -1;
 }
 ```
+​
+方法二： DP
+​
