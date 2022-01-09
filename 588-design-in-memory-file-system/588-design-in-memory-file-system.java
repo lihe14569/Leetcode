@@ -22,9 +22,9 @@ public class FileSystem {
                 return files;
             }
         }
-        List < String > res_files = new ArrayList < > (t.files.keySet());
-        Collections.sort(res_files);
-        return res_files;
+        files.addAll(t.files.keySet());
+        Collections.sort(files);
+        return files;
     }
 
     public void mkdir(String path) {
