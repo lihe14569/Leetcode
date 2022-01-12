@@ -20,8 +20,24 @@ class Solution {
             root = new TreeNode(val);
             return root;
         }
-        if(val > root.val) root.right = insertIntoBST(root.right, val);
-        else root.left = insertIntoBST(root.left, val);
+        TreeNode curr = root, prev = null;
+        while(curr != null) {
+            if(val > curr.val) {
+                if(curr.right != null) curr = curr.right;
+                else {
+                    TreeNode newNode = new TreeNode(val);
+                    curr.right = newNode;
+                    return root;
+                }
+            } 
+            else {
+                if(curr.left != null) curr = curr.left;
+                else {
+                    curr.left = new TreeNode(val);
+                    return root;
+                }
+            }
+        }
         return root;
     }
 }
