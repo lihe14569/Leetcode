@@ -4,7 +4,7 @@ class Solution {
         //2. variable cnt to record repeating characters
         int n = s.length(), res = 0;
 
-        for(int i = 0; i < 26; i++) {
+        for(int i = 1; i <= 26; i++) {
             Map<Character, Integer> map = new HashMap<>();
             int cnt = 0;
             int l = 0;
@@ -19,7 +19,8 @@ class Solution {
                     if(map.get(c2) == 0) map.remove(c2);
                     l++;
                 }
-                if(map.size() == cnt)
+    //注意：最后出窗口的时候，可能window size 小于i,所以要比较map size和cnt
+                if(map.size() == cnt) 
                     res = Math.max(res, j - l + 1);
             }
         }
