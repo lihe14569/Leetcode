@@ -14,21 +14,30 @@
  * }
  */
 class Solution {
-    public void dfs(TreeNode root, List<Integer> list) {
-        if(root == null) return;
-        dfs(root.left, list);
-        list.add(root.val);
-        dfs(root.right, list);
-    }
-    
     public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
-        //tree to line strucure and then sort
-        List<Integer> list1 = new ArrayList<>(), list2 = new ArrayList<>(), output = new ArrayList<>();
-        dfs(root1, list1);
-        dfs(root2, list2);
-        Stream.of(list1, list2).forEach(output::addAll);
-        Collections.sort(output);
-        return output;
+        List<Integer> res = new ArrayList<>();
+        Stack<TreeNode> s1 = new Stack<>(), s2 = new Stack<>();
+        while(root1 != null || root2!=null || !s1.isEmpty() || !s2.isEmpty()) {
+            //update both stacks
+            while(root1 != null) {
+                s1.push(root1);
+                root1 =root1.left;
+            }
+            while(root2 != null) {
+                s2.push(root2);
+                root2 =root2.left;
+            }
+            //add the smallest value into res
+            if(s2.isEmpty() || (!s1.isEmpty() && s1.peek().val <= s2.peek().val)) {
+                root1 = s1.pop();
+                res.add(root1.val);
+                root1 = root1.right;
+            } else {
+                root2 = s2.pop();
+                res.add(root2.val);
+                root2 = root2.right;
+            }
+        }
+        return res;
     }
-   
 }
