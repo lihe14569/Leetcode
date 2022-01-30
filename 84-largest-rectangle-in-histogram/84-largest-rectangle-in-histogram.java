@@ -1,23 +1,23 @@
 class Solution {
     public int largestRectangleArea(int[] heights) {
-        //mototonic stack
+        //dp + monotonic stack
         int n = heights.length;
-        Deque<Integer> stack = new ArrayDeque<>();
-        int res = 0;
-        
+        Stack<Integer> stack = new Stack<>();
+        stack.push(-1);
+        int area = 0;
         for(int i = 0; i < n; i++) {
-            while(!stack.isEmpty() && heights[i] < heights[stack.peekFirst()]) {
+            while(stack.peek() != -1 && heights[i] < heights[stack.peek()]) {
                 int h = heights[stack.pop()];
-                int w = i - (stack.isEmpty() ?  0 : stack.peekFirst() + 1);
-                res = Math.max(res, h * w);
+                int w = i - stack.peek() - 1;
+                area = Math.max(area, h * w);
             }
             stack.push(i);
         }
-        while(!stack.isEmpty()) {
+        while(stack.peek() != -1) {
             int h = heights[stack.pop()];
-            int w = n - (stack.isEmpty() ? 0 : stack.peek() + 1);
-            res = Math.max(res, h * w);
+            int w = n - stack.peek() - 1;
+            area = Math.max(area, h * w);
         }
-        return res;
+        return area;
     }
 }
