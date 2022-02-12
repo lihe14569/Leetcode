@@ -39,11 +39,18 @@ class Solution {
                      }
                 }
             }
-            if(endSet.size() < nextSet.size()) {
+            
+            // if(endSet.size() < nextSet.size()) {
+            //     beginSet = endSet;
+            //     endSet = nextSet;
+            // } else {
+            //     beginSet = nextSet;
+            // }
+            if(nextSet.size() < endSet.size()) {
+                beginSet = nextSet;
+            } else {
                 beginSet = endSet;
                 endSet = nextSet;
-            } else {
-                beginSet = nextSet;
             }
             step++;  
         }
