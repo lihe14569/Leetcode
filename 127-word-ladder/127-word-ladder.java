@@ -1,37 +1,37 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        //bfs
-        
-        //corner case
-        Set<String> dict = new HashSet<>();
-        for(String s : wordList) dict.add(s);
+        Set<String> dict = new HashSet<>(wordList);
         if(!dict.contains(endWord)) return 0;
-        if(beginWord.equals(endWord)) return 1;
-        Queue<String> q = new LinkedList<>();
-        q.offer(beginWord);
-        
-        int count = 1;
-        while(!q.isEmpty()) {
-            int size = q.size();
-            for(int i = 0; i < size; i++) {
-                String word = q.poll();
-                char[] chrs = word.toCharArray();
-                for(int j = 0;j < word.length(); j++) {
-                    char originCh = chrs[j];
+        Set<String> beginSet = new HashSet<>(), endSet = new HashSet<>();
+        beginSet.add(beginWord);
+        endSet.add(endWord);
+        int step = 1, n = beginWord.length();
+        while(!beginSet.isEmpty()) {
+            Set<String> nextSet = new HashSet<>();
+            for(String s : beginSet) {
+                char[] chrs = s.toCharArray();
+                for(int i = 0; i < n; i++) {
                     for(char c = 'a'; c <= 'z'; c++) {
-                        if(c == originCh) continue;
-                        chrs[j] = c;
-                        String nWord = new String(chrs);
-                        if(dict.contains(nWord)) {
-                            if(nWord.equals(endWord)) return count + 1;
-                            q.offer(nWord);
-                            dict.remove(nWord);
+                        char pre = chrs[i];
+                        if(pre == c) continue;
+                        chrs[i] = c;
+                        String newS = String.valueOf(chrs);
+                        if(endSet.contains(newS)) return step + 1;
+                        if(dict.contains(newS)) {
+                            nextSet.add(newS);
+                            dict.remove(newS);
                         }
-                        chrs[j] = originCh;
+                        chrs[i] = pre;
                     }
                 }
             }
-            count++;
+            if(endSet.size() < nextSet.size()) {
+                beginSet = endSet;
+                endSet = nextSet;
+            } else {
+                beginSet = nextSet;
+            }
+            step++;  
         }
         return 0;
     }
