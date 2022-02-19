@@ -1,6 +1,5 @@
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
-        //sweep line
         int n = intervals.length;
         int[] start = new int[n];
         int[] end = new int[n];
@@ -11,18 +10,14 @@ class Solution {
         Arrays.sort(start);
         Arrays.sort(end);
         
-        int cnt = 0, res = 0;
-        int si = 0, ei = 0;
-        while(si < n) {
-            if(start[si] < end[ei]) {
-                cnt++;
-                si++;
-                res = Math.max(res, cnt);
+        int room = 0, ei = 0;
+        for(int i = 0; i < n; i++) {
+            if(start[i] < end[ei]) {
+                room++;
             } else {
-                cnt--;
                 ei++;
             }
         }
-        return res;
+        return room;
     }
 }
