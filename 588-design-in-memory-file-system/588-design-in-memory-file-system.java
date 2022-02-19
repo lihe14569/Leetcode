@@ -1,62 +1,66 @@
-public class FileSystem {
+class FileSystem {
     class File {
-        boolean isfile = false;
-        HashMap < String, File > files = new HashMap < > ();
-        String content = "";
+        boolean isFile;
+        Map<String, File> files;
+        String content;
+        public File() {
+            isFile = false;
+            files = new HashMap<>();
+            content = "";
+        }
     }
     File root;
     public FileSystem() {
         root = new File();
     }
-
-    public List < String > ls(String path) {
-        File t = root;
-        List < String > files = new ArrayList < > ();
-        if (!path.equals("/")) {
-            String[] d = path.split("/");
-            for (int i = 1; i < d.length; i++) {
-                t = t.files.get(d[i]);
+    
+    public List<String> ls(String path) {
+        List<String> list = new ArrayList<>();
+        File f = root;
+        if(!path.equals("/")) {
+            String[] route = path.split("/");
+            for(int i = 1; i < route.length; i++) {
+                f = f.files.get(route[i]);
             }
-            if (t.isfile) {
-                files.add(d[d.length - 1]);
-                return files;
-            }
+            if(f.isFile) {
+                list.add(route[route.length - 1]);
+                return list;
+            } 
         }
-        files.addAll(t.files.keySet());
-        Collections.sort(files);
-        return files;
+        list.addAll(f.files.keySet());
+        Collections.sort(list);
+        return list;
     }
-
+    
     public void mkdir(String path) {
-        File t = root;
-        String[] d = path.split("/");
-        for (int i = 1; i < d.length; i++) {
-            if (!t.files.containsKey(d[i]))
-                t.files.put(d[i], new File());
-            t = t.files.get(d[i]);
+        File f = root;
+        String[] route = path.split("/");
+        for(int i = 1; i < route.length; i++) {
+            if(!f.files.containsKey(route[i]))
+                f.files.put(route[i], new File());
+            f = f.files.get(route[i]);
         }
     }
-
+    
     public void addContentToFile(String filePath, String content) {
-        File t = root;
+        File f = root;
         String[] d = filePath.split("/");
-        for (int i = 1; i < d.length - 1; i++) {
-            t = t.files.get(d[i]);
+        for(int i = 1; i < d.length; i++) {
+            if(!f.files.containsKey(d[i])) f.files.put(d[i], new File());
+            f = f.files.get(d[i]);
         }
-        if (!t.files.containsKey(d[d.length - 1]))
-            t.files.put(d[d.length - 1], new File());
-        t = t.files.get(d[d.length - 1]);
-        t.isfile = true;
-        t.content = t.content + content;
+        
+        f.isFile = true;
+        f.content += content;
     }
-
+    
     public String readContentFromFile(String filePath) {
-        File t = root;
+        File f = root;
         String[] d = filePath.split("/");
-        for (int i = 1; i < d.length - 1; i++) {
-            t = t.files.get(d[i]);
+        for(int i = 1; i < d.length; i++) {
+            f = f.files.get(d[i]);
         }
-        return t.files.get(d[d.length - 1]).content;
+        return f.content;
     }
 }
 
