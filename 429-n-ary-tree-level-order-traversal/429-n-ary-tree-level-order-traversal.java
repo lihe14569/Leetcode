@@ -21,20 +21,17 @@ class Solution {
     public List<List<Integer>> levelOrder(Node root) {
         List<List<Integer>> res = new ArrayList<>();
         if(root == null) return res;
-        Queue<Node> q = new LinkedList<>();
-        q.offer(root);
-        while(!q.isEmpty()) {
-            int size = q.size();
-            List<Integer> list = new ArrayList<>();
-            for(int i = 0; i < size; i++) {
-                Node node = q.poll();
-                list.add(node.val);
-                for(Node child : node.children) {
-                    q.offer(child);
-                }
-            }
-            res.add(list);
-        }
+        dfs(root, res, 0);
         return res;
+    }
+    public void dfs(Node root, List<List<Integer>> res, int level) {
+        if(res.size() == level) {
+            res.add(new ArrayList<>());
+        }
+        List<Integer> list = res.get(level);
+        list.add(root.val);
+        for(Node node : root.children) {
+            dfs(node, res, level + 1);
+        }
     }
 }
