@@ -1,35 +1,19 @@
-import java.util.Random;
 class Solution {
     public int findKthLargest(int[] nums, int k) {
-        //quickselect
-        k = nums.length - k;
-        return quickselect(nums, 0, nums.length -1, k);
-    }
-    public int quickselect(int[] nums, int l, int r, int k) {
-        if(l == r) return nums[l];
-        Random rand = new Random();
-        int pivotIdx = l + rand.nextInt(r - l);
-        pivotIdx = partition(nums, l, r, pivotIdx);
-        if(pivotIdx == k) return nums[k];
-        else if(k < pivotIdx)return quickselect(nums, l, pivotIdx - 1, k);
-        else return quickselect(nums, pivotIdx + 1, r, k);
-    }
-    public int partition(int[] nums, int l, int r, int pivotIdx) {
-        int pivot = nums[pivotIdx];
-        swap(nums, pivotIdx, r);
-        int wall = l;
-        for(int i = l; i <= r; i++) {
-            if(nums[i] < pivot) {
-                swap(nums, i, wall);
-                wall++;
-            }
+        int l = -10000, r = 10000;
+        while(l < r) {
+            int m = (l + r + 1)/ 2;
+            int count = greatEqual(nums, m);
+            if(count >= k) l = m;
+            else r = m - 1;
         }
-        swap(nums, wall, r);
-        return wall;
+        return l;
     }
-    public void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
+    public int greatEqual(int[] nums, int m) {
+        int res = 0;
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] >= m) res++;
+        }
+        return res;
     }
 }
