@@ -1,15 +1,13 @@
 class Solution {
-    Integer[] memo;
     public int rob(int[] nums) {
-        //top down recursion
-        int n = nums.length;
-        memo = new Integer[n];
-        return getVal(nums, n - 1);
-    }
-    public int getVal(int[] nums, int len) {
-        if(len < 0) return 0;
-        if(memo[len] != null) return memo[len];
-        int res = Math.max(getVal(nums, len - 2) + nums[len], getVal(nums, len - 1));
-        return memo[len] = res;
+        int[] dp = new int[nums.length + 1];
+        if(nums.length == 1) return nums[0];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        
+        for(int i = 2; i <= nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+        }
+        return dp[nums.length];
     }
 }
