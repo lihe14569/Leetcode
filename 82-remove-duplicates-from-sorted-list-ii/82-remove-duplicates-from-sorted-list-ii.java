@@ -11,25 +11,21 @@
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         if(head == null || head.next == null) return head;
-        //dummy node method
-        ListNode dummy = new ListNode(0);
+        ListNode dummy = new ListNode(-1);
         dummy.next = head;
-        ListNode pre = dummy, curr = head;
-        
-       while(curr != null ) {
-          //duplicates 
-           if(curr.next != null && curr.val == curr.next.val) {
-               while(curr.next != null && curr.val == curr.next.val)
-                   curr = curr.next;
-               //remove all the duplicated nodes
-               pre.next = curr.next;
-           }
-           //move predecessor forward
-           else {
-               pre = pre.next;
-           }
-          curr = curr.next;
-       }
+        ListNode prev = dummy, curr = head;
+        while(curr != null && curr.next != null) {
+            //如果是duplicate
+            if(curr != null && curr.val == curr.next.val) {
+                while(curr.next != null && curr.val == curr.next.val) {
+                    curr = curr.next;
+                }
+                prev.next = curr.next;
+            } else {
+                prev = prev.next;
+            }
+            curr = curr.next;
+        }
         return dummy.next;
     }
 }
