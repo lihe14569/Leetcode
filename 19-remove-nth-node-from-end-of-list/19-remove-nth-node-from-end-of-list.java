@@ -10,15 +10,14 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        //o(n)
+
         int size = 0;
-        for(ListNode curr = head; curr != null; curr = curr.next)  size++;
-        if(size == n) return head.next;
-        n = size - n;
-        
+        for(ListNode curr = head; curr != null; curr = curr.next) size++;
+        if(n == size) return head.next;
         ListNode curr = head;
-        for(int i = 0; i < n - 1; i++) curr = curr.next;
-        curr.next = curr.next.next;
+        for(int i = 0; i < size - n - 1; i++)
+            curr = curr.next;
+        curr.next =curr.next.next;
         return head;
     }
 }
