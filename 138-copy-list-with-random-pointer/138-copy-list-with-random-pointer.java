@@ -14,13 +14,13 @@ class Node {
 */
 
 class Solution {
+     //recursion -> graph
     Map<Node, Node> visited = new HashMap<>();
-    
     public Node copyRandomList(Node head) {
-        //method2: hashtable 
+        
         if(head == null) return head;
-        if(visited.containsKey(head))
-            return visited.get(head);
+        
+        if(visited.containsKey(head)) return visited.get(head);
         else {
             Node newNode = new Node(head.val);
             visited.put(head, newNode);
