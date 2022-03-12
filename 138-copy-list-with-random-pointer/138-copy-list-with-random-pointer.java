@@ -14,30 +14,30 @@ class Node {
 */
 
 class Solution {
-     //recursion -> graph
-    
+    //method2: iterative + hashmap
+    Map<Node, Node> visited = new HashMap<>();
     public Node copyRandomList(Node head) {
-        if(head == null) return null;
-        Map<Node, Node> visited = new HashMap<>();
+        if(head == null) return head;
         Node oldHead = head;
         Node newNode = new Node(head.val);
         visited.put(head, newNode);
-        
-        while(newNode!= null) {
-            newNode.random = getNode(oldHead.random, visited);
-            newNode.next = getNode(oldHead.next, visited);
+        while(oldHead != null) {
+            newNode.next = getNode(oldHead.next);
+            newNode.random = getNode(oldHead.random);
             newNode = newNode.next;
             oldHead = oldHead.next;
         }
         return visited.get(head);
     }
-    public Node getNode(Node node, Map<Node, Node> visited) {
+    public Node getNode(Node node) {
+        //base case
         if(node == null) return null;
         if(visited.containsKey(node)) return visited.get(node);
         else {
+            //Create a new Node,put it into visited map
             Node newNode = new Node(node.val);
             visited.put(node, newNode);
-            return visited.get(node);
+            return newNode;
         }
     }
 }
