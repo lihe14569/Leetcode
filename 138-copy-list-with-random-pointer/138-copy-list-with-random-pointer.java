@@ -15,18 +15,29 @@ class Node {
 
 class Solution {
      //recursion -> graph
-    Map<Node, Node> visited = new HashMap<>();
+    
     public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Map<Node, Node> visited = new HashMap<>();
+        Node oldHead = head;
+        Node newNode = new Node(head.val);
+        visited.put(head, newNode);
         
-        if(head == null) return head;
-        
-        if(visited.containsKey(head)) return visited.get(head);
-        else {
-            Node newNode = new Node(head.val);
-            visited.put(head, newNode);
-            newNode.next = copyRandomList(head.next);
-            newNode.random = copyRandomList(head.random);
+        while(newNode!= null) {
+            newNode.random = getNode(oldHead.random, visited);
+            newNode.next = getNode(oldHead.next, visited);
+            newNode = newNode.next;
+            oldHead = oldHead.next;
         }
         return visited.get(head);
+    }
+    public Node getNode(Node node, Map<Node, Node> visited) {
+        if(node == null) return null;
+        if(visited.containsKey(node)) return visited.get(node);
+        else {
+            Node newNode = new Node(node.val);
+            visited.put(node, newNode);
+            return visited.get(node);
+        }
     }
 }
