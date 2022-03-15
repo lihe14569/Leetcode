@@ -1,17 +1,14 @@
 class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {
-       
-        Set<String> set = new HashSet<>(wordDict);
-        
+        Set<String> dict = new HashSet<>(wordDict);
         List<Integer>[] dp = new ArrayList[s.length() + 1];
         for(int i = 0; i <= s.length(); i++) dp[i] = new ArrayList<>();
-        dp[0].add(0);// null string
+        dp[0].add(0);
+        
         for(int i = 1; i <= s.length(); i++) {
-            for(int j = 0; j < i; j++) {
-                if(!dp[j].isEmpty() && set.contains(s.substring(j, i))) {
+            for(int j = 0; j < i; j++) 
+                if(!dp[j].isEmpty() && dict.contains(s.substring(j, i)))
                     dp[i].add(j);
-                }
-            }
         }
         List<String> res = new ArrayList<>();
         getResults(dp, "", s.length(), s, res);
@@ -23,8 +20,8 @@ class Solution {
             res.add(curr.trim());
             return;
         }
-        for(int preIdx : dp[index]) {
-            getResults(dp, s.substring(preIdx, index) + " " + curr, preIdx, s, res);
+        for(int preIndex : dp[index]) {
+            getResults(dp, s.substring(preIndex, index) + " " + curr, preIndex, s, res);
         }
     }
 }
