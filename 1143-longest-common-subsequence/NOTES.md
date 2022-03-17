@@ -33,6 +33,3 @@ memo[s1][s2] = 1 + dfs(text1, text2, s1 + 1, s2 + 1, memo);
 } else {
 memo[s1][s2] = Math.max(dfs(text1, text2, s1 + 1, s2, memo), dfs(text1, text2, s1, s2 + 1, memo));
 }
-return memo[s1][s2];
-}
-```
