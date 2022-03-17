@@ -1,14 +1,14 @@
 class Solution {
     public int longestCommonSubsequence(String text1, String text2) {
-        return helper(text1, text2, 0, 0, new Integer[text1.length()][text2.length()]);
-    }
-    public int helper(String s1, String s2, int p1, int p2, Integer[][] memo) {
-        if(p1 >= s1.length() || p2 >= s2.length()) return 0;
-        if(memo[p1][p2] != null) return memo[p1][p2];
-        if(s1.charAt(p1) == s2.charAt(p2)) {
-            memo[p1][p2] = 1 + helper(s1, s2, p1 + 1, p2 + 1, memo);
-        } else 
-            memo[p1][p2] = Math.max(helper(s1, s2, p1 + 1, p2, memo), helper(s1, s2, p1, p2 + 1, memo));
-        return memo[p1][p2];
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        for(int i = 1; i <= text1.length(); i++) {
+            for(int j = 1; j <= text2.length(); j++) {
+                if(text1.charAt(i - 1) == text2.charAt(j - 1))
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                else 
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+        return dp[text1.length()][text2.length()];
     }
 }
