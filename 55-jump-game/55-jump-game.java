@@ -1,19 +1,13 @@
 class Solution {
-    Integer[] memo;
     public boolean canJump(int[] nums) {
-        memo = new Integer[nums.length];
-        return canJump1(0, nums) == 1;
-    }
-    public int canJump1(int start, int[] nums) {
-        //base
-        if(start == nums.length - 1) return memo[start] = 1;
-        if(memo[start] != null) return memo[start];
-        int max = Math.min(start + nums[start], nums.length - 1);
-        for(int i = start + 1; i <= max; i++) {
-            if(canJump1(i, nums) == 1) {
-                return memo[start] = 1;
-            }
-        } 
-        return memo[start] = -1;
+        int[] dp = new int[nums.length]; //dp代表从0 到i 能到达的最远index
+        if(nums.length == 1) return true;
+        dp[0] = nums[0];
+        for(int i = 1; i < nums.length - 1; i++) {
+            if(dp[i - 1] < i) return false;
+            dp[i] = Math.max(dp[i - 1], nums[i] + i);
+            if(dp[i] >= nums.length - 1) return true;
+        }
+        return dp[nums.length - 2] >= nums.length - 1 ? true : false;
     }
 }
