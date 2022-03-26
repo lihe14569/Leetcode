@@ -1,5 +1,8 @@
-单调栈
+方法一： dp
+![illustration](https://leetcode.com/problems/trapping-rain-water/Figures/42/trapping_rain_water.png)
 ​
+​
+单调栈
 ```
 public int trap(int[] height) {
 //two pointer
@@ -23,4 +26,6 @@ return res;
 ```
 ​
 two pointer
+```
+​
 ```
