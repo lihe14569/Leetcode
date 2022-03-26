@@ -21,6 +21,19 @@ method2: recursion + memo top-down
 ```
 public boolean wordBreak(String s, List<String> wordDict) {
 //recursion
+//注意!!初始的boolean memo 是wrapper class,以确保没有visited过，避免重复计算
 Boolean[] memo = new Boolean[s.length() + 1];
 Set<String> set = new HashSet<>(wordDict);
 return helper(s, set, memo, 0);
+}
+public boolean helper(String s, Set<String> set, Boolean[] memo, int start) {
+//base case
+if(start == s.length()) return true;
+if(memo[start] != null) return memo[start];
+for(int end = start + 1; end <= s.length(); end++) {
+if(set.contains(s.substring(start, end)) && helper(s, set, memo, end))
+return memo[start] = true;
+}
+return memo[start] =false;
+}
+```
