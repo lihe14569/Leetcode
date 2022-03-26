@@ -1,21 +1,14 @@
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-        //top-down 
         Set<String> dict = new HashSet<>(wordDict);
-        Boolean[] memo = new Boolean[s.length()];
-        return dp(s, dict, 0, memo);
-    }
-    public boolean dp(String s, Set<String> dict, int start, Boolean[] memo) {
-        //base case
-        if(start >= s.length()) return true;
-        //check if we already vsited here
-        if(memo[start] != null) return memo[start];
-        for(int i = start; i < s.length(); i++) {
-            String part = s.substring(start, i + 1);
-            if(dict.contains(part) && dp(s, dict, i + 1, memo)) {
-                return memo[start] = true;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for(int i = 1; i <= s.length(); i++) {
+            for(int j = i; j <= s.length(); j++) {
+                if(dict.contains(s.substring(i - 1, j)) && dp[ i - 1])
+                    dp[j] = true; 
             }
         }
-        return memo[start] = false;
+        return dp[s.length()];
     }
 }
