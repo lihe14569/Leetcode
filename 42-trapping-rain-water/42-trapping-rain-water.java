@@ -1,18 +1,22 @@
 class Solution {
     public int trap(int[] height) {
-       //two pointer
-        int l = 0, r = height.length - 1;
-        int lMax = 0, rMax = 0;
         int res = 0;
+        int n = height.length;
+        if(n == 1) return 0;
+        int l  = 0, r = n - 1, lmax = 0, rmax = 0;
         while(l < r) {
-            //易错点
-            if(height[l] < height[r]) {
-                if(height[l] > lMax) lMax = height[l];
-                else res += lMax - height[l];
+            if(height[l] <= height[r]) {
+                if(height[l] < lmax) {
+                    res += lmax - height[l];
+                } else {
+                    lmax = height[l];
+                }
                 l++;
             } else {
-                if(height[r] > rMax) rMax = height[r];
-                else res += rMax - height[r];
+                if(height[r] < rmax)
+                    res += rmax - height[r];
+                else 
+                    rmax = height[r];
                 r--;
             }
         }
