@@ -1,33 +1,31 @@
 class Solution {
     public int splitArray(int[] nums, int m) {
-        int sum = 0, maxNum = Integer.MIN_VALUE;
+        int sum = 0, max = Integer.MIN_VALUE;
         for(int num : nums) {
             sum += num;
-            maxNum = Math.max(num, maxNum);
+            max = Math.max(max, num);
         }
-        int l = maxNum, r = sum;
+        int l = max, r = sum;
         while( l < r) {
-            int mid = (r + l) / 2;
-            if(getMinSum(nums, mid) <= m) {//注意：如果 minSum 值大， 区分的区间就变少，所以应该缩小minSum
-                r= mid;
-            }
-            else
+            int mid = l + (r - l) / 2;
+            if(getSplits(nums, mid) <= m)
+                r = mid;
+            else 
                 l = mid + 1;
         }
-        
         return l;
     }
-    public int getMinSum(int[] nums, int mid) {
-        int cnt = 0;
+    public int getSplits(int[] nums, int mid) {
+        int count = 1;
         int sum = 0;
         for(int num : nums) {
-            if(sum + num <= mid) {
+            if(sum + num <= mid)
                 sum += num;
-            } else {
-                cnt++;
+            else {
                 sum = num;
+                count++;
             }
         }
-        return cnt + 1;
+        return count;
     }
 }
