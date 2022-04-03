@@ -1,13 +1,18 @@
 class Solution {
+    Boolean[] memo;
     public boolean canJump(int[] nums) {
-        int[] dp = new int[nums.length]; //dp代表从0 到i 能到达的最远index
-        if(nums.length == 1) return true;
-        dp[0] = nums[0];
-        for(int i = 1; i < nums.length - 1; i++) {
-            if(dp[i - 1] < i) return false;
-            dp[i] = Math.max(dp[i - 1], nums[i] + i);
-            if(dp[i] >= nums.length - 1) return true;
+        int n = nums.length;
+        memo = new Boolean[n];
+        return jump(nums, 0);
+    }
+    public boolean jump(int[] nums, int start) {
+        if(start == nums.length - 1) return true;
+        if(memo[start] != null) return memo[start];
+        int next = Math.min(nums.length - 1, start + nums[start]);
+        for(int i = start + 1; i<= next; i++) {
+            if(jump(nums, i))
+                return memo[start] = true;
         }
-        return dp[nums.length - 2] >= nums.length - 1 ? true : false;
+        return memo[start] = false;
     }
 }
