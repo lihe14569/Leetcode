@@ -1,17 +1,17 @@
 class Solution {
+    Integer[] memo;
     public int jump(int[] nums) {
-        //top down
-        int[] memo = new int[nums.length];
-        Arrays.fill(memo, -1);
-        return canJump(0, nums, memo);
+        int n = nums.length;
+        memo = new Integer[n];
+        return helper(nums, 0);
     }
-    public int canJump(int start, int[] nums, int[] memo) {
-        if(start >= nums.length  - 1) return  0;
-        if(memo[start] != - 1) return memo[start];
+    public int helper(int[] nums, int start) {
+        //base case
+        if(start >= nums.length - 1) return 0;
+        if(memo[start] != null) return memo[start];
         int step = nums.length;
-        int max = Math.max(start + nums[start], nums.length - 1);
         for(int i = 1; i <= nums[start]; i++) {
-            step = Math.min(step, 1 + canJump(start + i, nums, memo));
+            step = Math.min(step, 1 + helper(nums, start + i));
         }
         return memo[start] = step;
     }
