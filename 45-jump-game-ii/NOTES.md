@@ -45,5 +45,3 @@ return memo[p] = step;
 //eg: nums = [2,3,1,1,4]
 // i = 0, far = 0, end = 0; step = 1
 // i = 1, far = 2, end = 2, step = 1;
-// i = 2, far = 4, end = 2, step = 1
-//i = 3, far = 3, end = 3, step = 2
