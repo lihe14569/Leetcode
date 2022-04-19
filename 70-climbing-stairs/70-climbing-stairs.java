@@ -1,14 +1,14 @@
 class Solution {
-    
+    Integer[] memo;
     public int climbStairs(int n) {
-        int[] memo = new int[n + 1];
-        return helper(n, memo);
+        memo = new Integer[n + 1];
+        return dfs(n);
+        
     }
-    public int helper(int n, int[] memo) {
-        //base case
-        if(n <= 2) return n;
-        if(memo[n] != 0) return memo[n];
-        memo[n] = helper(n -1, memo) + helper(n - 2, memo);
-        return memo[n];
+    public int dfs(int n) {
+        if(n == 0) return 1;
+        if(n == 1) return 1;
+        if(memo[n] != null) return memo[n];
+        return memo[n] = dfs(n - 1) + dfs(n - 2);
     }
 }
