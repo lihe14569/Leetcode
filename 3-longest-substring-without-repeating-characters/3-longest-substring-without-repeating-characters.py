@@ -5,8 +5,10 @@ class Solution:
         
         for i in range(n):
             c = s[i]
-            if c in dic.keys():
-                left = max(dic[c], left)
-            dic[c] = i + 1
+            while c in dic.keys():
+                del dic[s[left]]
+                left += 1
+            dic[c] = i 
+            
             res = max(res, i - left + 1)
         return res
