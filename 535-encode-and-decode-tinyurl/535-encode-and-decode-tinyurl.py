@@ -1,13 +1,12 @@
 class Codec:
     dic = {}
-    i = 0
+    
     
     def encode(self, longUrl: str) -> str:
         """Encodes a URL to a shortened URL.
         """
-        self.dic[self.i] = longUrl
-        s = "http://tinyurl.com/" + str(self.i)
-        self.i += 1
+        self.dic[hash(longUrl)] = longUrl
+        s = "http://tinyurl.com/" + str(hash(longUrl))
         return s
         
 
