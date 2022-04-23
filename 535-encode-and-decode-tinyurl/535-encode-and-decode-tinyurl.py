@@ -1,7 +1,6 @@
 class Codec:
-    def __init__(self):
-        self.dic = {}
-        self.i = 0
+    dic = {}
+    i = 0
     
     def encode(self, longUrl: str) -> str:
         """Encodes a URL to a shortened URL.
