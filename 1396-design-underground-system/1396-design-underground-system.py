@@ -2,8 +2,8 @@ class UndergroundSystem:
 
     def __init__(self):
         self.ids = {}
-        self.time = Counter()
-        self.freq = Counter()
+        self.time = defaultdict(int)
+        self.freq = defaultdict(int)
 
     def checkIn(self, id: int, stationName: str, t: int) -> None:
         self.ids[id] =(stationName, t)
