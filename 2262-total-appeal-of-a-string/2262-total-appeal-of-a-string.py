@@ -1,7 +1,4 @@
 class Solution:
-    #abbca
-    #01234
-    #134
     def appealSum(self, s: str) -> int:
         res, curr, prev = 0, 0, {}
         for i, ch in enumerate(s):
