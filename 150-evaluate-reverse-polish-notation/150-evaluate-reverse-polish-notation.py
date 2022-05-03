@@ -13,6 +13,6 @@ class Solution:
                 elif s == '*':
                     stack.append(val1 * val2)
                 else:
-                    stack.append(int(float(val2) / val1))
+                    stack.append(int(val2 / val1))
         return stack.pop()
         
