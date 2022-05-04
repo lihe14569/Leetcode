@@ -1,16 +1,11 @@
 class Solution:
     def maxOperations(self, nums: List[int], k: int) -> int:
-        nums.sort()
-        l, r, cnt = 0, len(nums)- 1, 0
-        while l < r:
-            if nums[l] +nums[r] == k:
-                cnt += 1
-                l += 1
-                r -= 1
-            elif nums[l] +nums[r] < k:
-                l += 1
+        dic = defaultdict(int)
+        res= 0
+        for num in nums:
+            if dic[k - num] > 0:
+                dic[k- num] -= 1
+                res += 1
             else:
-                r -= 1
-                
-        return cnt
-            
+                dic[num] += 1
+        return res
