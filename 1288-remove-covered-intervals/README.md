@@ -24,7 +24,7 @@
 <ul>
 	<li><code>1 &lt;= intervals.length &lt;= 1000</code></li>
 	<li><code>intervals[i].length == 2</code></li>
-	<li><code>0 &lt;= l<sub>i</sub> &lt;= r<sub>i</sub> &lt;= 10<sup>5</sup></code></li>
+	<li><code>0 &lt;= l<sub>i</sub> &lt; r<sub>i</sub> &lt;= 10<sup>5</sup></code></li>
 	<li>All the given intervals are <strong>unique</strong>.</li>
 </ul>
 </div>
