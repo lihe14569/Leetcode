@@ -11,7 +11,7 @@ class StockPrice:
             self.rec[prev_price].remove(timestamp)
             if len(self.rec[prev_price]) == 0:
                 self.rec.pop(prev_price)
-        if not price in self.rec:
+        if  price not in self.rec:
             self.rec[price] = set()
         self.rec[price].add(timestamp)
         self.time_to_prices[timestamp] = price
