@@ -1,25 +1,23 @@
 class Solution:
     def splitArray(self, nums: List[int], m: int) -> int:
-        total, max_num = 0, nums[0]
+        l, r = 0, 0
         for num in nums:
-            max_num = max(max_num, num)
-            total += num
-        l, r=  max_num, total
+            l = max(l, num)
+            r += num
         
-        def countSubarray(nums, num_sum):
-            cnt,  curr_sum= 1, 0
+        def countArr(nums, mid):
+            cnt, total = 1, 0
             for num in nums:
-                if curr_sum + num <= num_sum:
-                    curr_sum += num
+                if total + num <= mid:
+                    total += num
                 else:
                     cnt += 1
-                    curr_sum = num
+                    total = num
             return cnt
-        
         while l < r:
             mid = (l + r) // 2
-            if countSubarray(nums, mid) <= m:
+            if countArr(nums, mid) <= m:
                 r = mid
             else:
-                l = mid + 1
+                l  = mid + 1
         return l
