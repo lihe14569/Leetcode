@@ -1,10 +1,14 @@
 class Solution:
     def frequencySort(self, s: str) -> str:
-        #bucketsort: hashtable + sort
+        #bucketsort: hashtable + heap
         dic = collections.defaultdict(int)
         for c in s:
             dic[c] += 1
         res = []
-        for k, v in sorted(dic.items(), key=lambda x: -x[1]):
-            res += [k]*v
+        pq = []
+        for k, v in dic.items():
+            heapq.heappush(pq, (-v, k))
+        while pq:
+            v, c= heapq.heappop(pq)
+            res += [c]*-v
         return ''.join(res)
