@@ -26,6 +26,18 @@ return quickselect(l, pos - 1, k)
 return quickselect(0, len(nums) - 1, k)
 ```
 ​
+heap method:
+```
+def findKthLargest(self, nums: List[int], k: int) -> int:
+pq =[]
+res = nums[0]
+for num in nums:
+heapq.heappush(pq, num)
+if len(pq) > k:
+heapq.heappop(pq)
+return pq[0]
+```
+​
 binary search to find the kth largest
 ​
 ​
