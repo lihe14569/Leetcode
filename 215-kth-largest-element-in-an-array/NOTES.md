@@ -1,26 +1,31 @@
-quickselect
+}
 ```
-mport java.util.Random;
+quickselect python version
+```
+def findKthLargest(self, nums: List[int], k: int) -> int:
+#quickselect
+#based k value, search left half, or right half
+k = len(nums) - k
+def quickselect(l, r, k):
+if l == r: return nums[l]
+def partition(l, r):
+pivot = nums[r]
+wall = l
+for j in range(l, r):
+if nums[j] < pivot:
+nums[j], nums[wall] = nums[wall], nums[j]
+wall += 1
+nums[wall], nums[r] = nums[r], nums[wall]
+return wall
+pos = partition(l, r)
+if pos == k: return nums[k]
+elif pos < k:
+return quickselect(pos + 1, r, k)
+else:
+return quickselect(l, pos - 1, k)
+return quickselect(0, len(nums) - 1, k)
+```
 ​
-class Solution {
-Random rand = new Random();
-public int findKthLargest(int[] nums, int k) {
-int n = nums.length;
-k = n - k;
-return quickselect(nums, 0, n - 1, k);
-}
-public int quickselect(int[] nums, int l, int r, int k) {
-if(l == r)
-return nums[l];
-int position = partition(nums, l, r);
-if(position == k)
-return nums[k];
-else if(position < k) {
-return quickselect(nums, position + 1, r, k);
-}
-else {
-return quickselect(nums, l, position - 1, k);
-}
-}
-public int partition(int[] nums, int l, int r) {
-int pivotIndex = l + rand.nextInt(r - l + 1);
+binary search to find the kth largest
+​
+​
