@@ -1,7 +1,7 @@
 class Solution:
    def hasValidPath(self, A):
         m, n = len(A), len(A[0])
-        if (n + m) % 2 == 0: return False
+        # if (n + m) % 2 == 0: return False
         dp = [[set() for j in range(n)] for i in range(m)]
         for i in range(m):
             for j in range(n):
