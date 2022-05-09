@@ -1,17 +1,21 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        dic = {0:'',1:'', 2: 'abc', 3: 'def', 4: 'ghi', 5:'jkl', 6: 'mno', 7:'pqrs', 8:'tuv', 9:'wxyz'}
+        #dfs
+        
         res = []
-        def dfs(idx: int, lst:List[str]):
+        if not digits or len(digits) == 0:
+            return res
+        dic = {'2': 'abc', '3': 'def', '4': 'ghi', '5':'jkl', '6': 'mno', '7':'pqrs', '8':'tuv', '9':'wxyz'}
+        def backtrack(idx, lst):
             nonlocal res, dic
-            if len(lst) == len(digits):
-                res.append(''.join(lst))
-                return 
-            num = int(digits[idx])
-            for c in dic[num]:
+            if idx == len(digits):
+                s = ''.join(lst)
+                res.append(s)
+                return
+            for c in dic[digits[idx]]:
                 lst.append(c)
-                dfs(idx + 1, lst)
+                backtrack(idx + 1, lst)
                 lst.pop()
-        if not digits: return res
-        dfs(0, [])
+        backtrack(0, [])
         return res
+            
