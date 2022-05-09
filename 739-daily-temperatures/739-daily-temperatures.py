@@ -1,13 +1,9 @@
 class Solution:
     def dailyTemperatures(self, t: List[int]) -> List[int]:
-        #正向单调栈
         res = [0] * len(t)
-        stack = deque()
-        #维持一个单调递减栈
-        for i in range(len(t)):
-            while stack and t[stack[-1]] < t[i]:
-                idx = stack.pop()
-                res[idx] = i - idx
+        stack = []
+        for i in range(len(t) - 1, -1, -1):
+            while stack and t[i] >= t[stack[-1]]: stack.pop()
+            res[i] = stack[-1] - i if stack else 0
             stack.append(i)
         return res
-        
