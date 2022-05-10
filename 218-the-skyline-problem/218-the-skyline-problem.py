@@ -1,29 +1,12 @@
 class Solution:
-    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
-        s = []
-        ans = []
-        h = 0
-        for left, right, height in buildings:
-            while s and s[0][0] < left:
-                r, rh = heapq.heappop(s)
-                if rh == h:
-                    rh = max(s, key=lambda val: val[1])[1] if s else 0
-                    if rh != h:
-                        h = rh
-                        ans.append([r, h])
-            if height > h:
-                h = height
-                # 避免左端点重复的问题
-                if ans and left == ans[-1][0]:
-                    ans[-1][1] = h
-                else:
-                    ans.append([left, h])
-            heapq.heappush(s, [right, height])
-        while s:
-            r, rh = heapq.heappop(s)
-            if rh == h:
-                rh = max(s, key=lambda val: val[1])[1] if s else 0
-                if rh != h:
-                    h = rh
-                    ans.append([r, h])
-        return ans
+    def getSkyline(self, buildings):
+        events = sorted([(L, -H, R) for L, R, H in buildings] + list({(R, 0, None) for _, R, _ in buildings}))
+        res, hp = [[0, 0]], [(0, float("inf"))]
+        for x, negH, R in events:
+            while x >= hp[0][1]: 
+                heapq.heappop(hp)
+            if negH: 
+                heapq.heappush(hp, (negH, R))
+            if res[-1][1] + hp[0][0]: 
+                res += [x, -hp[0][0]],
+        return res[1:]
