@@ -1,16 +1,16 @@
 class Solution:
     def shortestSubarray(self, nums: List[int], k: int) -> int:
-        prefix = [0]* (len(nums) + 1)
-        for i in range(len(nums)):
-            prefix[i + 1] = prefix[i] + nums[i]
+        n = len(nums)
+        monoq = deque()
+        res = n + 1
+        prefix = [0] * (n + 1)
+        for i in range(n): prefix[i + 1] = prefix[i] + nums[i]
         
-        queue = deque()
-        res = len(nums) + 1
-        for i in range(len(nums) + 1):
-            while queue and prefix[i] - prefix[queue[0]] >= k:
-                res = min(res, i - queue[0])
-                queue.popleft()
-            while queue and prefix[i] <= prefix[queue[-1]]:
-                queue.pop()
-            queue.append(i)
-        return res if res != len(nums) + 1 else -1
+        for i in range(n + 1):
+            while monoq and prefix[i] - prefix[monoq[0]] >= k:
+                res = min(res, i - monoq.popleft())
+            while monoq and prefix[i] <= prefix[monoq[-1]]:
+                monoq.pop()
+            monoq.append(i)
+        return res if res != n + 1 else -1
+            
