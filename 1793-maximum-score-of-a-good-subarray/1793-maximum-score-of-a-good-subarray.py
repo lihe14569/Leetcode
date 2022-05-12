@@ -1,15 +1,20 @@
 class Solution:
     def maximumScore(self, nums: List[int], k: int) -> int:
-        res = min_num = nums[k]
-        l , r, n = k, k, len(nums)
+        res, n = nums[k], len(nums)
+        stack = [-1]
         
-        while l > 0 or r < n - 1:
-            left = nums[l - 1] if l - 1 >= 0 else 0
-            right = nums[r + 1] if r + 1 < n else 0
-            if left < right:
-                r += 1
-            else:
-                l -= 1
-            min_num = min(min_num, nums[l], nums[r])
-            res = max(res, min_num * (r - l + 1))
+        for i in range(n):
+            while stack[-1] != -1 and nums[i] <= nums[stack[-1]]:
+                height = nums[stack.pop()]
+                width = i - stack[-1] - 1
+                if stack[-1] < k < i:
+                    res = max(res, height*width)
+            stack.append(i)
+        while stack[-1] != -1:
+            height = nums[stack.pop()]
+            width = n - stack[-1] - 1
+            if stack[-1] < k < n:
+                res = max(res, height* width)
         return res
+                
+        
