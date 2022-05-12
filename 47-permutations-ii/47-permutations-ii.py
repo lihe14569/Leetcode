@@ -1,23 +1,16 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res = []
-        nums.sort()
-        visited = set()
-        def dfs(lst, visited):
-            nonlocal res
+        def backtrack(lst, counter):
             if len(lst) == len(nums):
                 res.append(lst[:])
                 return
-            
-            for i in range(len(nums)):
-                
-                if i in visited or (i != 0 and nums[i] == nums[i - 1] and i - 1 in visited):
-                    continue
-                lst.append(nums[i])
-                visited.add(i)
-                dfs(lst,visited)
-                lst.pop()
-                visited.remove(i)
-        dfs([], visited)
+            for num in counter:
+                if counter[num] > 0:
+                    lst.append(num)
+                    counter[num] -= 1
+                    backtrack(lst, counter)
+                    lst.pop()
+                    counter[num] +=1
+        backtrack([], Counter(nums))
         return res
-            
