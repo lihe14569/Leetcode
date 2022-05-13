@@ -23,3 +23,13 @@ tail = new Node();
 head.next = tail;
 tail.prev = head;
 map = new HashMap<>();
+}
+public int get(int key) {
+Node node = map.get(key);
+if(node == null) {
+return -1;
+} else {
+int res = node.val;
+moveHead(node);
+return res;
+}
