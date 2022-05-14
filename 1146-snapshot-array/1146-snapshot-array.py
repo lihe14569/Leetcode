@@ -16,7 +16,7 @@ class SnapshotArray:
 
     def get(self, index: int, snap_id: int) -> int:
         lst = self.dic[index]
-        i = bisect.bisect(lst, [snap_id + 1]) - 1
+        i = bisect.bisect_left(lst, [snap_id + 1]) - 1
         return lst[i][1]
 
 
