@@ -7,14 +7,8 @@
 
 class Solution:
     def getTargetCopy(self, original: TreeNode, cloned: TreeNode, target: TreeNode) -> TreeNode:
-        def dfs(root):
-            if target.val == root.val:
-                return root
-            res, left, right = TreeNode(-1), None, None
-            if root.left:
-                left = dfs(root.left)
-            if root.right:
-                right = dfs(root.right)
-            return left or right
-        return dfs(cloned)
-        
+        if original is None or original == target:
+            return cloned
+        left = self.getTargetCopy(original.left, cloned.left, target)
+        if left: return left
+        return self.getTargetCopy(original.right, cloned.right, target)
