@@ -5,15 +5,30 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
-        res = []
-        def dfs(root):
-            if not root:
-                return -1
-            height = max(dfs(root.left), dfs(root.right)) + 1
-            if height >= len(res):
-                res.append([])
-            res[height].append(root.val)
-            return height
-        dfs(root)
-        return res
+    def findLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        
+        if not root:
+            return []
+        result=[]
+        while root:
+            curLeaves = []
+            root = self._findLeaves(root, curLeaves)
+            
+            result.append(curLeaves)
+        
+        return result 
+
+    def _findLeaves(self, root, curLeaves):
+        if not root:
+            return None
+        if not root.left and not root.right:
+            curLeaves.append(root.val)
+            return None
+        else:
+            root.left = self._findLeaves(root.left, curLeaves)
+            root.right = self._findLeaves(root.right, curLeaves)
+            return root
