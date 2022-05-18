@@ -1,5 +1,5 @@
 class Solution:
-    def minFlips1(self, mat: List[List[int]]) -> int:
+    def minFlips(self, mat: List[List[int]]) -> int:
         m, n = len(mat), len(mat[0])
         num = sum(cell<<(i*n + j) for i, row in enumerate(mat) for j, cell in enumerate(row))
         q = deque()
@@ -19,12 +19,12 @@ class Solution:
                         for r, c in (x, y), (x + 1, y), (x -1, y), (x , y + 1), (x, y - 1):
                             if 0 <= r < m and 0 <= c < n:
                                 next ^= 1<< (r*n + c)
-                                if next not in seen:
-                                    seen.add(next)
-                                    q.append(next)
+                        if next not in seen:
+                            seen.add(next)
+                            q.append(next)
             step += 1
         return -1
-    def minFlips(self, mat: List[List[int]]) -> int:
+    def minFlips1(self, mat: List[List[int]]) -> int:
         m, n = len(mat), len(mat[0])
         start = sum(cell << (i * n + j) for i, row in enumerate(mat) for j, cell in enumerate(row))
         dq = collections.deque([(start, 0)])
