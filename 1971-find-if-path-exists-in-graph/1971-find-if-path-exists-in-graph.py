@@ -6,16 +6,19 @@ class Solution:
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
+        hasPath = False
+        seen = set()
+        def dfs(node):
+            nonlocal hasPath
+            if node in seen:
+                return
+            
+            if node == destination:
+                hasPath = True
+            seen.add(node)
+            for nei in graph[node]:
+                dfs(nei)
         
-        q = deque([source])
-        seen = {source}
-        
-        while q:
-            curr = q.popleft()
-            if curr == destination:
-                return True
-            for nei in graph[curr]:
-                if nei not in seen:
-                    seen.add(nei)
-                    q.append(nei)
-        return False
+        dfs(source)
+        return hasPath
+            
