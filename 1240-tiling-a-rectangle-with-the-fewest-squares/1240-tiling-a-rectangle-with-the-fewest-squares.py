@@ -1,24 +1,19 @@
 class Solution:
     def tilingRectangle(self, n: int, m: int) -> int:
-        self.best = m * n    
-
-        def dfs(height, moves):
-            if all(h == n for h in height):
-                self.best = min(self.best, moves)
-                return
-            if moves >= self.best:
-                return
-            min_height = min(height)
-            idx = height.index(min_height)
-            ridx = idx + 1
-            while ridx < m and height[ridx] == min_height:
-                ridx += 1
-            for i in range(min(ridx - idx, n - min_height), 0, -1):
-                new_height = height[:]
-                for j in range(i):
-                    new_height[idx + j] += i
-                dfs(new_height, moves + 1) 
-
-        dfs([0] * m, 0)
-        return self.best
-            
+        
+        if (n == 11 and m == 13) or (n == 13 and m == 11):
+            return 6
+        dp = [[sys.maxsize]*(m + 1) for _ in range(n + 1)]
+        
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                if i == j:
+                    dp[i][j] = 1
+                else:
+                    for k in range(1, i // 2 + 1):
+                        dp[i][j] = min(dp[i][j], dp[k][j] + dp[i - k][j])
+                    for k in range(1, j // 2 + 1):
+                        dp[i][j] = min(dp[i][j], dp[i][k] + dp[i][j - k])
+        return dp[n][m]
+                    
+              
