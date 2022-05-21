@@ -1,22 +1,4 @@
-method1 :  dp + dfs
-```
-public List<String> wordBreak(String s, List<String> wordDict) {
-Set<String> dict = new HashSet<>(wordDict);
-List<Integer>[] dp = new ArrayList[s.length() + 1];
-for(int i = 0; i <= s.length(); i++) dp[i] = new ArrayList<>();
-dp[0].add(0);
-for(int i = 1; i <= s.length(); i++) {
-for(int j = 0; j < i; j++)
-if(!dp[j].isEmpty() && dict.contains(s.substring(j, i)))
-dp[i].add(j);
-}
-List<String> res = new ArrayList<>();
-getResults(dp, "", s.length(), s, res);
-return res;
-}
 public void getResults(List<Integer>[] dp, String curr, int index, String s, List<String> res) {
-//base case
-if(index == 0) {
 res.add(curr.trim());
 return;
 }
@@ -24,4 +6,24 @@ for(int preIndex : dp[index]) {
 getResults(dp, s.substring(preIndex, index) + " " + curr, preIndex, s, res);
 }
 }
+```
+​
+top-down recursive method + memo:
+```
+def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+memo = defaultdict(list)
+word_dic = set(wordDict)
+def dfs(word):
+if not word:
+return [[]]
+if word in memo:
+return memo[word]
+for end in range(1, len(word) + 1):
+w = word[:end]
+if w in word_dic:
+for sentence in dfs(word[end:]):
+memo[word].append([w] + sentence)
+return memo[word]
+dfs(s)
+return [ ' '.join(lst) for lst in memo[s]]
 ```
