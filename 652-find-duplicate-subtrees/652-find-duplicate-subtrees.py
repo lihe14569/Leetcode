@@ -6,19 +6,18 @@
 #         self.right = right
 class Solution:
     def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:
-        tree_freq = Counter()
+        key_id = Counter()
         res = []
+        id = 0
         def dfs(root):
-            #base case
             if not root:
-                return '#'
-            key = ','.join([str(root.val), dfs(root.left), dfs(root.right)])
-            if key in tree_freq:
-                tree_freq[key] += 1
-                if tree_freq[key] == 2:
-                    res.append(root)
-            else:
-                tree_freq[key] = 1
+                return 'x'
+            key = str(root.val) + ',' + dfs(root.left) + ',' + dfs(root.right)
+            key_id[key] += 1
+            
+            if key_id[key] == 2:
+                res.append(root)
             return key
         dfs(root)
         return res
+            
