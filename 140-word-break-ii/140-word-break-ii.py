@@ -7,10 +7,10 @@ class Solution:
                 res.append(' '.join(lst))
                 return
                 
-            for j in range(i, len(s)):
-                if s[i:j + 1] in dic:
-                    lst.append(s[i:j + 1])
-                    dfs(j + 1, lst)
+            for j in range(i + 1, len(s) + 1):
+                if s[i:j] in dic:
+                    lst.append(s[i:j])
+                    dfs(j, lst)
                     lst.pop()
             
         dfs(0, [])
