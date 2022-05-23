@@ -1,9 +1,7 @@
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
-        pq =[]
-        res = nums[0]
-        for num in nums:
-            heapq.heappush(pq, num)
-            if len(pq) > k:
-                heapq.heappop(pq)
-        return pq[0]
+       if not nums: return
+       p = random.choice(nums)
+       l, m, r = [x for x in nums if x > p], [x for x in nums if x == p], [x for x in nums if x < p]
+       nums, i, j = l+m+r, len(l), len(l)+len(m)
+       return self.findKthLargest(nums[:i], k) if k <= i else self.findKthLargest(nums[j:], k-j) if k > j else nums[i]
