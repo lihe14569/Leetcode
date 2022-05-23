@@ -10,6 +10,8 @@ class Solution:
         first = second = head
         for i in range(n):
             first = first.next
+        
+        #注意删除头的情况
         if not first:
             return head.next
         
@@ -17,4 +19,4 @@ class Solution:
             first = first.next
             second = second.next
         second.next = second.next.next
-        return dummy.next
+        return head
