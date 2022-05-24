@@ -15,6 +15,8 @@ class Solution:
             for j in range(jump):
                 if cur: cur = cur.next
             if cur:
-                cur.next, cur = None, cur.next
+                next_head = cur.next
+                cur.next = None
+                cur = next_head
             ans.append(head)
         return ans
