@@ -10,7 +10,9 @@ class Solution:
         cur = root
         for i in range(k):
             head = cur
-            for j in range(width + (i < remainder) - 1):
+            jump = width - 1 + (1 if remainder > 0 else 0)
+            remainder -= 1
+            for j in range(jump):
                 if cur: cur = cur.next
             if cur:
                 cur.next, cur = None, cur.next
