@@ -5,26 +5,17 @@
 #         self.next = next
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        #find mid point of the list, reverse list  and compare
-        fast = slow = head
-        while fast and fast.next:
-            fast = fast.next.next
-            slow =slow.next
-        if fast: slow = slow.next
-        def reverse(head):
-            prev, curr = None, head
-            while curr:
-                next = curr.next
-                curr.next = prev
-                prev = curr
-                curr = next
-            return prev
-        fast = reverse(slow)
-        slow = head
-        while fast:
-            if fast.val != slow.val:
-                return False
-            fast = fast.next
-            slow =slow.next
-        return True
+        p1 = head
+        def recursive(p2):
+            nonlocal p1
+            if not p2:
+                return True
+            else:
+                if not recursive(p2.next):
+                    return False
+                if p1.val != p2.val:
+                    return False
+                p1 = p1.next
+                return True
+        return recursive(head)
             
