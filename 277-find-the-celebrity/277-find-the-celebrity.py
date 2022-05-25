@@ -8,7 +8,7 @@ class Solution:
         for i in range(n):
             if celeb == i:
                 continue
-            if knows(celeb, i) or not knows(i, celeb):
+            if knows(celeb, i):
                 celeb = i
         for i in range(n):
             if celeb == i:
