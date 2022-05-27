@@ -6,22 +6,20 @@
 #         self.right = right
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
-        #recursion
-        #function: get the number of path start from root
-        def dfs(root, sum):
-            step = 0
+        def preorder(root, sum):
+            nonlocal res, dic
             if not root:
-                return 0
-            if root.val == sum:
-                step += 1
-            step += dfs(root.left, sum - root.val) + dfs(root.right, sum - root.val)
-            return step
-        if not root:
-            return 0
-        #answer is composed three part:
-        #1. root as start point included
-        #2. root.left as start point, included
-        #3. root.right as start point, included
-        
-        return dfs(root, targetSum) + self.pathSum(root.left, targetSum) + self.pathSum(root.right, targetSum)
-        
+                return 
+            sum += root.val
+            if sum == targetSum:
+                res += 1
+            if sum - targetSum in dic:
+                res += dic[sum - targetSum]
+            dic[sum] += 1
+            preorder(root.left, sum)
+            preorder(root.right, sum)
+            dic[sum] -= 1
+        dic = defaultdict(int)
+        res = 0
+        preorder(root, 0)
+        return res
