@@ -1,7 +1,7 @@
 class Solution:
     def minKnightMoves(self, x: int, y: int) -> int:
 
-        @lru_cache(maxsize=None)
+        @cache
         def dfs(x, y):
             if x + y == 0:
                 # base case: (0, 0)
