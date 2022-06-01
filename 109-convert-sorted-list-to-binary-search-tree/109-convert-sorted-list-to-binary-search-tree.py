@@ -11,18 +11,16 @@
 #         self.right = right
 class Solution:
     def sortedListToBST(self, head: Optional[ListNode]) -> Optional[TreeNode]:
-        def dfs(root):
-            if not root:
+        def dfs(node):
+            if not node:
                 return None
-            if not root.next:
-                return TreeNode(root.val)
-            prev = fast = slow = root
+            if not node.next:
+                return TreeNode(node.val)
+            prev = slow = fast = node
             while fast and fast.next:
                 prev = slow
                 slow = slow.next
                 fast = fast.next.next
             prev.next = None
-            nRoot = TreeNode(slow.val, dfs(root), dfs(slow.next))
-            return nRoot
+            return TreeNode(slow.val, dfs(node), dfs(slow.next))
         return dfs(head)
-            
