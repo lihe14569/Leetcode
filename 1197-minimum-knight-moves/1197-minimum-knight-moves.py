@@ -1,19 +1,15 @@
 class Solution:
     def minKnightMoves(self, x: int, y: int) -> int:
-        #bfs
-        seen = set()
-        seen.add((0, 0))
-        q = deque([(0, 0 , 0)])
-        step = 0
-        while q:
-            size = len(q)
-            for i in range(size):
-                r, c, dis = q.popleft()
-                if r == x and c == y:
-                    return dis
-                for i, j in (r + 2, c + 1), (r + 2, c - 1), (r + 1, c + 2), (r + 1, c - 2), (r -1, c + 2), (r -1, c- 2), (r- 2, c + 1), (r -2, c - 1):
-                    if (i, j) not in seen:
-                        seen.add((i, j))
-                        q.append([i, j, dis + 1])
-            
-        return -1
+
+        @lru_cache(maxsize=None)
+        def dfs(x, y):
+            if x + y == 0:
+                # base case: (0, 0)
+                return 0
+            elif x + y == 2:
+                # base case: (1, 1), (0, 2), (2, 0)
+                return 2
+            else:
+                return min(dfs(abs(x - 1), abs(y - 2)), dfs(abs(x - 2), abs(y - 1))) + 1
+
+        return dfs(abs(x), abs(y))
