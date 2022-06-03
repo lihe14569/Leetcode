@@ -1,48 +1,70 @@
-class BIT {
-    int[] sums;
-    BIT(int size) {
-        sums = new int[size + 1];
-    }
-    int lowbit(int x) {
-        return x & (-x);
-    }
-    void addValue(int i, int val) {
-        while(i < sums.length) {
-            sums[i] += val;
-            i += lowbit(i);
-        }
-    }
-    int getSum(int i) {
-        int sum = 0;
-        while(i > 0) {
-            sum += sums[i];
-            i -= lowbit(i);
-        }
-        return sum;
-    }
-    int getRangeSum(int l, int r) {
-        return getSum(r) - getSum(l - 1);
-    }
-}
 class NumArray {
-    int[] nums;
-    BIT bit;
+    class STNode {
+        int start, end;
+        STNode left, right;
+        int sum;
+        STNode(int start, int end) {
+            this.start = start;
+            this.end = end;
+            left = null;
+            right = null;
+            sum = 0;
+        }
+    }
+    STNode root;
     public NumArray(int[] nums) {
-        this.nums = nums;
-        bit = new BIT(nums.length);
-        for(int i = 0; i < nums.length; i++) {
-            bit.addValue(i + 1, nums[i]);
+        root = buildTree(nums, 0, nums.length - 1);
+    }
+    private STNode buildTree(int[] nums, int start, int end) {
+        if(start > end) return null;
+        else{
+            STNode curr = new STNode(start, end);
+            if(start == end) {
+                curr.sum = nums[start];
+            } else {
+                int mid = start + (end - start) / 2;
+                curr.left = buildTree(nums, start, mid);
+                curr.right = buildTree(nums, mid + 1, end);
+                curr.sum = curr.left.sum + curr.right.sum;
+            }
+            return curr;
         }
     }
     
     public void update(int index, int val) {
-        int diff = val - nums[index];
-        bit.addValue(index + 1, diff);
-        nums[index] = val;
+        update(root, index, val);
+    }
+    private void update(STNode node, int index, int val) {
+        if(node.start == index && node.end == index) {
+            node.sum = val;
+            return;
+        } else {
+            int mid = node.start + (node.end - node.start) / 2;
+            if(index <= mid) {
+                update(node.left, index, val);
+            } else {
+                update(node.right, index, val);
+            }
+            node.sum = node.left.sum + node.right.sum;
+        }
+    }
+    private int sumRange(STNode root, int left, int right) {
+        if(root.start == left && root.end == right){
+            return root.sum;
+        } else {
+            int mid = root.start + (root.end - root.start)/ 2;
+            if(right <= mid) {
+                return sumRange(root.left, left, right);
+            } else if(left >= mid + 1) {
+                return sumRange(root.right, left, right);
+            } else {
+                return sumRange(root.left, left, mid) + sumRange(root.right, mid + 1, right);
+            }
+        }
     }
     
     public int sumRange(int left, int right) {
-        return bit.getRangeSum(left + 1, right + 1);
+        return sumRange(root, left, right);
     }
 }
 
