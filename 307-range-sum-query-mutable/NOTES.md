@@ -1,31 +1,42 @@
-BIT->https://leetcode.cn/problems/range-sum-query-mutable/solution/-by-hu-ge-8-t4rn/ 图解
-PYTHON SOLTUION
-​
 ```
-class BIT:
-def __init__(self, size):
-self.sums = [0]*(size + 1)
-def lowbit(self, x):
-return x & (-x)
-def getSum(self, i):
-s = 0
-while i > 0:
-s += self.sums[i]
-i -= self.lowbit(i)
-return s
-def getSumRange(self, l, r):
-return self.getSum(r) - self.getSum(l - 1)
-def insert(self, i, val):
-while i < len(self.sums):
-self.sums[i] += val
-i += self.lowbit(i)
-class NumArray:
 ​
-def __init__(self, nums: List[int]):
-self.nums = nums
-self.BIT = BIT(len(nums))
-for i, val in enumerate(nums):
-self.BIT.insert(i + 1, val)
-def update(self, index: int, val: int) -> None:
-diff = val - self.nums[index]
+JAVA SOLUTION
+```
 class BIT { // one-based indexing
+int[] bit;
+BIT(int size) {
+bit = new int[size + 1];
+}
+int getSum(int idx) { // Get sum in range [1..idx]
+int sum = 0;
+for (; idx > 0; idx -= idx & (-idx))
+sum += bit[idx];
+return sum;
+}
+int getSumRange(int left, int right) { // left, right inclusive
+return getSum(right) - getSum(left - 1);
+}
+void addValue(int idx, int val) {
+for (; idx < bit.length; idx += idx & (-idx))
+bit[idx] += val;
+}
+}
+class NumArray {
+BIT bit;
+int[] nums;
+public NumArray(int[] nums) {
+this.nums = nums;
+bit = new BIT(nums.length);
+for (int i = 0; i < nums.length; ++i)
+bit.addValue(i+1, nums[i]);
+}
+public void update(int index, int val) {
+int diff = val - nums[index]; // get diff amount of `val` compared to current value
+bit.addValue(index + 1, diff); // add this `diff` amount at index `index+1` of BIT, plus 1 because in BIT it's 1-based indexing
+nums[index] = val; // update latest value of `nums[index]`
+}
+public int sumRange(int left, int right) {
+return bit.getSum(right+1) - bit.getSum(left);
+}
+}
+```
