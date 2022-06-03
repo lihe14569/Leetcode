@@ -1,44 +1,52 @@
-class BIT:
-    def __init__(self, size):
-        self.sums = [0]*(size + 1)
+class BIT {
+    int[] sums;
+    BIT(int size) {
+        sums = new int[size + 1];
+    }
+    void addValue(int i, int val) {
+        while(i < sums.length) {
+            sums[i] += val;
+            i += i & (-i);
+        }
+    }
+    int getSum(int i) {
+        int sum = 0;
+        while(i > 0) {
+            sum += sums[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
+    int getRangeSum(int l, int r) {
+        return getSum(r) - getSum(l - 1);
+    }
+}
+class NumArray {
+    BIT bit;
+    int[] nums;
+    public NumArray(int[] nums) {
+        this.nums = nums;
+        bit = new BIT(nums.length);
+        for(int i = 0; i < nums.length; i++) {
+            bit.addValue(i + 1, nums[i]);
+        }
+    }
     
-    def lowbit(self, x):
-        return x & (-x)
+    public void update(int index, int val) {
+        int diff = val - nums[index];
+        bit.addValue(index + 1, diff);
+        nums[index] = val;
+    }
     
-    def getSum(self, i):
-        s = 0
-        while i > 0:
-            s += self.sums[i]
-            i -= self.lowbit(i)
-        return s
-    
-    def getSumRange(self, l, r):
-        return self.getSum(r) - self.getSum(l - 1)
-    
-    def insert(self, i, val):
-        while i < len(self.sums):
-            self.sums[i] += val
-            i += self.lowbit(i)
-    
-    
-class NumArray:
+    public int sumRange(int left, int right) {
+        return bit.getRangeSum(left + 1, right + 1);
+        // return bit.getSum(right + 1) - bit.getSum(left);
+    }
+}
 
-    def __init__(self, nums: List[int]):
-        self.nums = nums
-        self.BIT = BIT(len(nums))
-        for i, val in enumerate(nums):
-            self.BIT.insert(i + 1, val)
-            
-    def update(self, index: int, val: int) -> None:
-        diff = val - self.nums[index]
-        self.BIT.insert(index + 1, diff)
-        self.nums[index] = val
-
-    def sumRange(self, left: int, right: int) -> int:
-        return self.BIT.getSumRange(left + 1, right + 1)
-
-
-# Your NumArray object will be instantiated and called as such:
-# obj = NumArray(nums)
-# obj.update(index,val)
-# param_2 = obj.sumRange(left,right)
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */
