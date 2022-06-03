@@ -3,17 +3,20 @@ class BIT {
     BIT(int size) {
         sums = new int[size + 1];
     }
+    int lowbit(int x) {
+        return x & (-x);
+    }
     void addValue(int i, int val) {
         while(i < sums.length) {
             sums[i] += val;
-            i += i & (-i);
+            i += lowbit(i);
         }
     }
     int getSum(int i) {
         int sum = 0;
         while(i > 0) {
             sum += sums[i];
-            i -= i & (-i);
+            i -= lowbit(i);
         }
         return sum;
     }
@@ -22,8 +25,8 @@ class BIT {
     }
 }
 class NumArray {
-    BIT bit;
     int[] nums;
+    BIT bit;
     public NumArray(int[] nums) {
         this.nums = nums;
         bit = new BIT(nums.length);
@@ -40,7 +43,6 @@ class NumArray {
     
     public int sumRange(int left, int right) {
         return bit.getRangeSum(left + 1, right + 1);
-        // return bit.getSum(right + 1) - bit.getSum(left);
     }
 }
 
