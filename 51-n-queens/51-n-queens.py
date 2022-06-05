@@ -1,31 +1,31 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        def createBoard(state):
-            board = []
-            for row in state:
-                board.append(''.join(row))
-            return board
-        
-        def backtrack(row, cols, diagonals, anti_diagonals, state):
+        def backtrack(row, cs, ds, ads, state):
+            nonlocal res
             #base case
             if row == n:
-                ans.append(createBoard(state))
-                return
-            for col in range(n):
-                diagonal = row - col
-                anti_diagonal = row + col
-                if col in cols or diagonal in diagonals or anti_diagonal in anti_diagonals:
+                lst= []
+                for s in state:
+                    lst.append(''.join(s))
+                res.append(lst)
+                return 
+            for c in range(n):
+                d = row + c
+                ad = row - c
+                if c in cs or d in ds or ad in ads:
                     continue
-                cols.add(col)
-                diagonals.add(diagonal)
-                anti_diagonals.add(anti_diagonal)
-                state[row][col] = 'Q'
-                backtrack(row + 1, cols, diagonals, anti_diagonals, state)
-                cols.remove(col)
-                diagonals.remove(diagonal)
-                anti_diagonals.remove(anti_diagonal)
-                state[row][col] = '.'
-        ans = []
-        state = [['.']*n for _ in range(n)]
-        backtrack(0, set(), set(), set(), state)
-        return ans
+                cs.add(c)
+                ds.add(d)
+                ads.add(ad)
+                state[row][c] = 'Q'
+                backtrack(row + 1, cs, ds, ads, state)
+                cs.remove(c)
+                ds.remove(d)
+                ads.remove(ad)
+                state[row][c] = '.'
+        #create a board
+        board = [['.']*n for _ in range(n)]
+        res = []
+        backtrack(0, set(), set(), set(), board)
+        return res
+        
