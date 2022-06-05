@@ -1,45 +1,44 @@
 class TextEditor:
+
     def __init__(self):
-        self.left_stack = []
-        self.right_stack = []
+        self.left = []
+        self.right = []
 
     def addText(self, text: str) -> None:
-        for ch in text:
-            self.left_stack.append(ch)
+        for c in text:
+            self.left.append(c)
 
     def deleteText(self, k: int) -> int:
-        count = 0
-        while self.left_stack and k > 0:
-            self.left_stack.pop()
-            count += 1
+        cnt = 0
+        while self.left and k > 0:
+            c = self.left.pop()
+            cnt += 1
             k -= 1
-        return count
+        return cnt 
 
     def cursorLeft(self, k: int) -> str:
-        while self.left_stack and k > 0:
-            ch = self.left_stack.pop()
-            self.right_stack.append(ch)
-            k-=1
-        return self.cursor_shift_str()
+        while self.left and k > 0:
+            c = self.left.pop()
+            self.right.append(c)
+            k -= 1
+        return self.shift_left_str()
 
     def cursorRight(self, k: int) -> str:
-        while self.right_stack and k > 0:
-            ch = self.right_stack.pop()
-            self.left_stack.append(ch)
-            k-=1
-        return self.cursor_shift_str()            
+        while self.right and k > 0:
+            c = self.right.pop()
+            self.left.append(c)
+            k -= 1
+        return self.shift_left_str()
     
-    # function to return the last min(10, len) characters to the left of the cursor
-    def cursor_shift_str(self):        
-        ans = []
-        count = 10
-        j = len(self.left_stack)-1
-        while j >= 0 and count > 0:                        
-            ans.append(self.left_stack[j])
-            j-=1
-            count -=1
-
-        return "".join(ans[::-1])
+    def shift_left_str(self):
+        res = []
+        cursor = len(self.left) - 1
+        cnt = 10
+        while cursor >= 0 and cnt > 0:
+            res.append(self.left[cursor])
+            cursor -= 1
+            cnt -= 1
+        return ''.join(res[::-1])
 
 
 # Your TextEditor object will be instantiated and called as such:
