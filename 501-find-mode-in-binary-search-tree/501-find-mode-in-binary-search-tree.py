@@ -8,16 +8,14 @@ class Solution:
     def findMode(self, root: Optional[TreeNode]) -> List[int]:
         res = []
         max_freq = 0
-        dic = {}
+        dic = defaultdict(int)
         def inorder(root):
             nonlocal res, max_freq, dic
             if not root:
                 return 
             inorder(root.left)
-            if root.val not in dic:
-                dic[root.val] = 1
-            else:
-                dic[root.val] += 1
+            
+            dic[root.val] += 1
             if dic[root.val] > max_freq:
                 max_freq = dic[root.val]
                 res.clear()
