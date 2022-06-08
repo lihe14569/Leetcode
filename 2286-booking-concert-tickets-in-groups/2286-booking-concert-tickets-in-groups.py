@@ -1,5 +1,3 @@
-
-
 class SegmentTree():
     def __init__(self, l, r):
         self.val = 0
