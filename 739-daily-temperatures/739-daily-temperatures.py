@@ -1,10 +1,10 @@
 class Solution:
-    def dailyTemperatures(self, t: List[int]) -> List[int]:
-        res = [0] * len(t)
+    def dailyTemperatures(self, temp: List[int]) -> List[int]:
         stack = []
-        for i in range(len(t) - 1, -1, -1):
-            while stack and t[i] >= t[stack[-1]]:
-                stack.pop()
-            res[i] = stack[-1] - i if stack else 0
+        res = [0] * len(temp)
+        for i in range(len(temp)):
+            while stack and temp[i] > temp[stack[-1]]:
+                j = stack.pop()
+                res[j] = i - j
             stack.append(i)
         return res
