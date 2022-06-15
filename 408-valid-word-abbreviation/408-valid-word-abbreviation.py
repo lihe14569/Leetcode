@@ -6,7 +6,7 @@ class Solution:
                 i += 1
                 j += 1
                 continue
-            if ord(abbr[j]) <= ord('0') or ord(abbr[j]) >= ord('9'):
+            if ord(abbr[j]) <= ord('0') or ord(abbr[j]) > ord('9'):
                 return False
             start = j
             while j < len(abbr) and ord(abbr[j]) >= ord('0') and ord(abbr[j]) <= ord('9'):
