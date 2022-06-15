@@ -10,7 +10,7 @@ i++;
 j++;
 continue;
 }
-if(abbr.charAt(j) <= '0' ||abbr.charAt(j) >= '9')
+if(abbr.charAt(j) <= '0' ||abbr.charAt(j) > '9')
 return false;
 int start = j;
 while(j < abbr.length() && abbr.charAt(j) >= '0' && abbr.charAt(j) <= '9') {
