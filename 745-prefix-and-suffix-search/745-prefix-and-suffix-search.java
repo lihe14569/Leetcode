@@ -1,45 +1,50 @@
 class WordFilter {
-    TrieNode root;
+    Trie root;
     String[] words;
-
-    public WordFilter(String[] words) {
-        root = new TrieNode();
-        TrieNode node = root;
-        for (int i = 0; i < words.length; i++) {
-            for (char ch : words[i].toCharArray()) {
-                if (root.child[ch - 'a'] == null) {
-                    root.child[ch - 'a'] = new TrieNode();
-                }
-
-                root.child[ch - 'a'].indexList.add(i);
-                root = root.child[ch - 'a'];
-            }
-            root = node;
+    
+    class Trie {
+        Trie[] children;
+        List<Integer> index;
+        
+        Trie() {
+            children = new Trie[26];
+            index = new ArrayList<>();
         }
-
-        this.words = words;
+        
     }
-
-    public int f(String prefix, String suffix) {
-        TrieNode node = root;
-        for (char ch : prefix.toCharArray()) {
-            node = node.child[ch - 'a'];
-            if (node == null) {
-                return -1;
+    //put the word and index in the trie
+    public WordFilter(String[] words) {
+        root = new Trie();
+        this.words = words;
+        for(int i = 0; i < words.length; i++) {
+            Trie node = root;
+            for(char ch : words[i].toCharArray()) {
+                if(node.children[ch - 'a'] == null)
+                    node.children[ch - 'a'] = new Trie();
+                node = node.children[ch - 'a'];
+                node.index.add(i);
             }
         }
-
-        List<Integer> list = node.indexList;
-        for (int i = list.size() - 1; i >= 0; i--) {
-            if (words[list.get(i)].endsWith(suffix)) {
-                return list.get(i);
-            }
+    }
+    
+    public int f(String prefix, String suffix) {
+        Trie node = root;
+        for(char c : prefix.toCharArray()) {
+            if(node.children[c - 'a'] == null)
+                return -1;
+            node = node.children[c - 'a'];
+        }
+        List<Integer> lst = node.index;
+        for(int i = lst.size() -1; i >= 0; i--) {
+            if(words[lst.get(i)].endsWith(suffix))
+                return lst.get(i);
         }
         return -1;
     }
-
-    private static class TrieNode {
-        TrieNode[] child = new TrieNode[26];
-        List<Integer> indexList = new ArrayList<>();
-    }
 }
+
+/**
+ * Your WordFilter object will be instantiated and called as such:
+ * WordFilter obj = new WordFilter(words);
+ * int param_1 = obj.f(prefix,suffix);
+ */
