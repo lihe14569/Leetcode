@@ -16,23 +16,24 @@
 class Solution {
     int cnt = 0;
     public int minCameraCover(TreeNode root) {
-        if(helper(root) == 0)
+        if(dfs(root) == 0)
             cnt += 1;
         return cnt;
     }
-    //2: covered
-    //1: placed camera
-    //0: not covered
-    public int helper(TreeNode root) {
+    //0: not coverd 
+    //1: place a camera
+    //2: covered null or covered nodes
+    int dfs(TreeNode root) {
         if(root == null) return 2;
-        int left = helper(root.left);
-        int right = helper(root.right);
-        if(left == 0 || right == 0) {
-            cnt += 1;
-            return 1;
-        }
+        int left = dfs(root.left);
+        int right = dfs(root.right);
         if(left == 2 && right == 2) {
             return 0;
-        } else  return 2; //注意：
+        } else if ( left == 0 || right == 0) {
+            cnt += 1;
+            return 1;
+        } else { //1 and 2
+            return 2;
+        }
     }
 }
