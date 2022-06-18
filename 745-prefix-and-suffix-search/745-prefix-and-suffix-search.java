@@ -1,37 +1,47 @@
 class WordFilter {
-    TrieNode trie;
+    class Trie {
+        Trie[] children;
+        int weight;
+        Trie() {
+            children = new Trie[27];
+            weight = 0;
+        }
+    }
+    Trie root;
     public WordFilter(String[] words) {
-        trie = new TrieNode();
-        for (int weight = 0; weight < words.length; ++weight) {
-            String word = words[weight] + "{";
-            for (int i = 0; i < word.length(); ++i) {
-                TrieNode cur = trie;
-                cur.weight = weight;
-                for (int j = i; j < 2 * word.length() - 1; ++j) {
-                    int k = word.charAt(j % word.length()) - 'a';
-                    if (cur.children[k] == null)
-                        cur.children[k] = new TrieNode();
-                    cur = cur.children[k];
-                    cur.weight = weight;
-                }
+        root = new Trie();
+        for(int i = 0; i < words.length; i++) {
+            String word = "{" + words[i];
+            insert(root, word, i); //有必要吗
+            for(int j = 0; j < word.length(); j++) {
+                String nWord = word.substring(1 + j) + word;
+                insert(root, nWord, i);
             }
         }
     }
-    public int f(String prefix, String suffix) {
-        TrieNode cur = trie;
-        for (char letter: (suffix + '{' + prefix).toCharArray()) {
-            if (cur.children[letter - 'a'] == null) return -1;
-            cur = cur.children[letter - 'a'];
+    public void insert(Trie root, String word, int idx) {
+        Trie node = root;
+        for(char c : word.toCharArray()) {
+            if(node.children[c - 'a'] == null) 
+                node.children[c - 'a'] = new Trie();
+            node = node.children[c - 'a'];
+            node.weight = idx;
         }
-        return cur.weight;
+    }
+    
+    public int f(String prefix, String suffix) {
+        Trie node = root;
+        String target = suffix + "{" + prefix;
+        for(char c : target.toCharArray()) {
+            if(node.children[c - 'a'] == null) return -1;
+            node = node.children[c - 'a'];
+        }
+        return node.weight;
     }
 }
 
-class TrieNode {
-    TrieNode[] children;
-    int weight;
-    public TrieNode() {
-        children = new TrieNode[27];
-        weight = 0;
-    }
-}
+/**
+ * Your WordFilter object will be instantiated and called as such:
+ * WordFilter obj = new WordFilter(words);
+ * int param_1 = obj.f(prefix,suffix);
+ */
