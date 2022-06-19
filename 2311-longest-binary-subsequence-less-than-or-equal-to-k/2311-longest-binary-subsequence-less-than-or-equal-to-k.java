@@ -1,13 +1,19 @@
 class Solution {
     public int longestSubsequence(String s, int k) {
-        int val = 0, cnt = 0, pow = 1;
-        for (int i = s.length() - 1; i >= 0 && val + pow <= k; --i) {
-            if (s.charAt(i) == '1') {
-                ++cnt;
-                val += pow;
-            }
-            pow <<= 1;
+        String ks = Integer.toBinaryString(k);
+        int m = s.length(), n = ks.length();
+        if(m < n) return m;
+        int res = n - 1;
+        for(int i = 0; i < m - n  + 1; i++) {
+            if(s.charAt(i) == '0') res++;
         }
-        return (int)s.chars().filter(ch -> ch == '0').count() + cnt;
+        if(s.substring(m - n).compareTo(ks) <= 0) {
+            int cnt = 0;
+            for(int i = 0; i < m - n; i++) {
+                if(s.charAt(i) == '0') cnt++;
+            }
+            res = Math.max(res, cnt + n);
+        }
+        return res;
     }
 }
