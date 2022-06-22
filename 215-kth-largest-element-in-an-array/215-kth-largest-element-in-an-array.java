@@ -20,7 +20,7 @@ class Solution {
         int pivot = nums[r];
         int wall = l;
         for(int i = l; i < r; i++) {
-            if(nums[i] < pivot) {
+            if(nums[i] <= pivot) {
                 swap(nums, i, wall);
                 wall++;
             }
