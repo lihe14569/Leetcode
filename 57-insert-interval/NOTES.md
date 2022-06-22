@@ -17,3 +17,8 @@ newInterval[1] = max(curr[1], newInterval[1])
 if newInterval is not None: res.append(newInterval)
 return res
 ```
+​
+java
+```
+public int[][] insert(int[][] intervals, int[] ni) {
+List<int[]> list = new ArrayList<>();
