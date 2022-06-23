@@ -1,36 +1,30 @@
 class SummaryRanges {
-    TreeMap<Integer, int[]> map = new TreeMap<>();
+    private TreeSet<int[]> intervalSet; 
+
+    public SummaryRanges() {
+        this.intervalSet = new TreeSet<>((a, b) -> a[0] - b[0]);
+    }
+    
     public void addNum(int val) {
-        if(map.containsKey(val)) return;
-        Integer lowerKey = map.lowerKey(val);
-        Integer higherKey = map.higherKey(val);
-        if(lowerKey != null && higherKey !=null && val == map.get(lowerKey)[1]+1 
-           && val == map.get(higherKey)[0] -1 ){
-            map.get(lowerKey)[1] = map.get(higherKey)[1];
-            map.remove(higherKey);
-        } else if (lowerKey != null && val <= map.get(lowerKey)[1] +1 ){
-            map.get(lowerKey)[1] = Math.max(val,map.get(lowerKey)[1]);
-        } else if (higherKey != null && val == map.get(higherKey)[0] -1 ){
-            map.put(val,new int[]{val,map.get(higherKey)[1]});
-            map.remove(higherKey);
-        } else {             
-            map.put(val,new int[]{val,val});
-        }  
+        int[] valInterval = new int[]{val, val};
+        int[] floor = intervalSet.floor(valInterval);
+        if (floor != null) {
+            if (floor[1] >= val) {
+                return;
+            } else if (floor[1] + 1 == val) {
+                valInterval[0] = floor[0];
+                intervalSet.remove(floor);
+            }
+        }
+        int[] higher = intervalSet.higher(valInterval);
+        if (higher != null && higher[0] == val + 1) {
+            valInterval[1] = higher[1];
+            intervalSet.remove(higher);
+        }
+        intervalSet.add(valInterval);
     }
     
     public int[][] getIntervals() {
-        int[][] res = new int[map.size()][2];
-        int i = 0;
-        for(int[] a:map.values()){
-            res[i++] = a;
-        }
-        return res;
+        return this.intervalSet.toArray(new int[0][]);
     }
 }
-
-/**
- * Your SummaryRanges object will be instantiated and called as such:
- * SummaryRanges obj = new SummaryRanges();
- * obj.addNum(val);
- * int[][] param_2 = obj.getIntervals();
- */
