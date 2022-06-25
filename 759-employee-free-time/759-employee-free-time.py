@@ -8,12 +8,13 @@ class Interval:
 
 class Solution:
     def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
-        lst = sorted([i for s in schedule for i in s], key=lambda x : x.start)
-        prev, res = lst[0], []
-        for i in lst[1:]:
-            if prev.end >= i.start:
-                prev.end = max(prev.end, i.end)
+        times = sorted([i for s in schedule for i in s], key=lambda x : x.start)
+        curr = times[0]
+        res = []
+        for i in times[1:]:
+            if curr.end >= i.start:
+                curr.end = max(curr.end, i.end)
             else:
-                res.append(Interval(prev.end, i.start))
-                prev = i
+                res.append(Interval(curr.end, i.start))
+                curr = i
         return res
