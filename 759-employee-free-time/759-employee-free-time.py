@@ -1,19 +1,37 @@
-"""
-# Definition for an Interval.
-class Interval:
-    def __init__(self, start: int = None, end: int = None):
-        self.start = start
-        self.end = end
-"""
+/*
+// Definition for an Interval.
+class Interval {
+    public int start;
+    public int end;
 
-class Solution:
-    def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
-        ints = sorted([i for s in schedule for i in s], key=lambda x: x.start)
-        res, pre = [], ints[0]
-        for i in ints[1:]:
-            if i.start <= pre.end and i.end > pre.end:
-                pre.end = i.end
-            elif i.start > pre.end:
-                res.append(Interval(pre.end, i.start))
-                pre = i
-        return res
+    public Interval() {}
+
+    public Interval(int _start, int _end) {
+        start = _start;
+        end = _end;
+    }
+};
+*/
+
+class Solution {
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.start, b.start));
+        //put all interval in pq
+        for(List<Interval> lst : schedule) {
+            for(Interval i : lst) {
+                pq.offer(i);
+            }
+        }
+        Interval curr = pq.poll();
+        List<Interval> res = new ArrayList<>();
+        while(!pq.isEmpty()) {
+            if(curr.end >=  pq.peek().start) {
+                curr.end = Math.max(curr.end, pq.poll().end);
+            } else {
+                res.add(new Interval(curr.end, pq.peek().start));
+                curr = pq.poll();
+            }
+        }
+        return res;
+    }
+}
