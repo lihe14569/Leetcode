@@ -11,12 +11,20 @@
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         if(head == null || head.next == null) return head;
-        ListNode curr = head;
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode prev = dummy, curr = dummy.next;
+        
         while(curr != null) {
-            while(curr.next != null && curr.val == curr.next.val)
+            //remove the duplicate
+            if(curr.next != null && curr.val == curr.next.val) {
                 curr.next = curr.next.next;
+                continue;
+            }
+            //move forward
+            prev = curr;
             curr = curr.next;
         }
-        return head;
+        return dummy.next;
     }
 }
