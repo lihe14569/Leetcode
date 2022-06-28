@@ -1,30 +1,26 @@
-slow = slow.next;
-fast = fast.next.next;
-}
-//store the mid node
-ListNode mid = slow.next;
-//split the list from mid
-slow.next = null;
-return mid;
-}
-public ListNode merge(ListNode l1, ListNode l2) {
-if(l1 == null) return l2;
-if(l2 == null) return l1;
-ListNode dummy = new ListNode(-1);
-ListNode curr = dummy;
-while(l1 != null && l2 != null) {
-if(l1.val <= l2.val) {
-curr.next = l1;
-l1 = l1.next;
-curr = curr.next;
-} else {
-curr.next = l2;
-l2 = l2.next;
-curr =curr.next;
-}
-}
-curr.next = (l1 != null) ? l1 : l2;
-return dummy.next;
-}
-}
+bottom-up iterative method  time nlogn, space o1
 ```
+public ListNode sortList(ListNode head) {
+//bottom up
+if(head == null || head.next == null) return head;
+ListNode dummy = new ListNode(-1);
+dummy.next = head;
+//get list length
+int n = 0;
+for(ListNode p = head; p != null; p =p.next) n++;
+for(int i = 1; i < n; i*= 2) {
+ListNode curr = dummy;
+for(int j = 0; j + i < n; j += 2 * i) {
+ListNode first = curr.next, second = first;
+for(int k = 0; k < i; k++) second = second.next;
+//merge sort two part
+int f = 0, s = 0;
+while(f < i && s < i && second != null) {
+if(first.val < second.val) {
+curr.next = first;
+first = first.next;
+curr = curr.next;
+f++;
+} else {
+curr.next = second;
+second = second.next;
