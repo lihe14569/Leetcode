@@ -1,39 +1,39 @@
 class SummaryRanges {
-    TreeMap<Integer, Integer> map;
+    TreeMap<Integer, Integer> intervals;
     public SummaryRanges() {
-        map = new TreeMap<>();
+        intervals = new TreeMap<>();
     }
     
     public void addNum(int val) {
-        if(map.isEmpty()) {
-            map.put(val, val);
+        if(intervals.isEmpty()) {
+            intervals.put(val, val);
             return;
         }
-        Map.Entry<Integer, Integer> pre = map.floorEntry(val);
-        Map.Entry<Integer, Integer> post = map.ceilingEntry(val);
+        Map.Entry<Integer, Integer> pre = intervals.floorEntry(val);
+        Map.Entry<Integer, Integer> post = intervals.ceilingEntry(val);
         int left = val, right = val;
-        if(pre != null && pre.getKey() <= left &&pre.getValue() >= right) {
+        if(pre != null && pre.getKey() <= val && pre.getValue() >= val) {
             return;
         }
         if(pre != null && pre.getValue() + 1 == val) {
-            left  = pre.getKey();
-            map.remove(pre.getKey());
+            left = pre.getKey();
+            intervals.remove(pre.getKey());
         }
         if(post != null && val + 1 == post.getKey()) {
             right = post.getValue();
-            map.remove(post.getKey());
+            intervals.remove(post.getKey());
         }
-        map.put(left, right);
+        intervals.put(left, right);
     }
     
     public int[][] getIntervals() {
-        int[][] res = new int[map.size()][2];
+        int[][] res = new int[intervals.size()][2];
         int i = 0;
-        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            res[i][0] = entry.getKey();
-            res[i][1] = entry.getValue();
+        for(Map.Entry<Integer, Integer> e : intervals.entrySet()) {
+            res[i][0] = e.getKey();
+            res[i][1] = e.getValue();
             i++;
-        }
+        } 
         return res;
     }
 }
