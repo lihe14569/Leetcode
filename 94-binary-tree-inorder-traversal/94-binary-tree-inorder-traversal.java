@@ -16,10 +16,9 @@
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> lst = new ArrayList<>();
-        
         if(root == null) return lst;
         Deque<TreeNode> stack = new ArrayDeque<>();
-        while(!stack.isEmpty() || root != null) {
+        while(root != null || !stack.isEmpty()) {
             while(root != null) {
                 stack.push(root);
                 root = root.left;
