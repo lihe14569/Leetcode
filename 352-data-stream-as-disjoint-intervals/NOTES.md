@@ -23,3 +23,4 @@ temp.append(curr)
 self.intervals = temp
 return self.intervals
 ```
+​
