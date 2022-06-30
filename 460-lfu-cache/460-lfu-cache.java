@@ -60,18 +60,19 @@ class LFUCache {
 
     public int get(int key) {
         if (map.get(key) == null) return -1;
-
+        //等到node，存储频率和频率链表，将node从对应链表中删除
         Node node = map.get(key);
         int prevFreq = node.cnt;
         DLList prevList = freq.get(prevFreq);
         prevList.remove(node);
-
+        //更新频率，最大频率，获得更新频率对应的链表，更新node的评率
+        //将更新频率的node加入到更新频率对应的链表中
         int curFreq = prevFreq + 1;
         maxFreq = Math.max(maxFreq, curFreq);
         DLList curList = freq.getOrDefault(curFreq, new DLList());
         node.cnt++;
         curList.addHead(node);
-
+        //更新之前频率和现在频率的freq 映射map
         freq.put(prevFreq, prevList);
         freq.put(curFreq, curList);
         return node.val;
@@ -89,7 +90,7 @@ class LFUCache {
         DLList curList = freq.getOrDefault(1, new DLList());
         curList.addHead(node);
         size++;
-        freq.put(1, curList);
+        
 
         if (size > capacity) {
             if (curList.len > 1) {
@@ -106,6 +107,6 @@ class LFUCache {
             size--;
         }
 
-        
+        freq.put(1, curList);
     }
 }
