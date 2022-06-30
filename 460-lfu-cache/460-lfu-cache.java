@@ -1,63 +1,111 @@
-public class LFUCache {
-    
-    private int min;
+class LFUCache {
+    class Node {
+        int key, val;
+        int cnt;
+        Node prev, next;
+        public Node(int k, int v) {
+            key = k;
+            val = v;
+            cnt = 1;
+        }
+    }
 
-    private final int capacity;
-    private final HashMap<Integer, Integer> keyToVal;
-    private final HashMap<Integer, Integer> keyToCount;
-    private final HashMap<Integer, LinkedHashSet<Integer>> countToLRUKeys;
-    
+    class DLList {
+        Node head, tail;
+        int len;
+        public DLList() {
+            head = new Node(0, 0);
+            tail = new Node(0, 0);
+            head.next = tail;
+            tail.prev = head;
+            len = 0;
+        }
+
+        public void addHead(Node node) {
+            Node next = head.next;
+            head.next = node;
+            node.prev = head;
+            node.next = next;
+            next.prev = node;
+            map.put(node.key, node);
+            len++;
+        }
+
+        public void remove(Node node) {
+            Node prev = node.prev;
+            Node next = node.next;
+            prev.next = next;
+            next.prev = prev;
+            len--;
+            map.remove(node.key);
+        }
+
+        public void removeTail() {
+            Node prevTail = tail.prev;
+            remove(prevTail);
+        }
+    }
+
+    Map<Integer, Node> map;
+    Map<Integer, DLList> freq;
+    int size, capacity;
+    int maxFreq;
     public LFUCache(int capacity) {
-        this.min = -1;
+        map = new HashMap<>();
+        freq = new HashMap<>();
         this.capacity = capacity;
-        this.keyToVal = new HashMap<>();
-        this.keyToCount = new HashMap<>();
-        this.countToLRUKeys = new HashMap<>();
+        size = 0;
+        maxFreq = 0;
     }
-    
+
     public int get(int key) {
-        if (!keyToVal.containsKey(key)) return -1;
-        
-        int count = keyToCount.get(key);
-        countToLRUKeys.get(count).remove(key); // remove key from current count (since we will inc count)
-        if (count == min && countToLRUKeys.get(count).size() == 0) min++; // nothing in the current min bucket
-        
-        putCount(key, count + 1);
-        return keyToVal.get(key);
+        if (map.get(key) == null) return -1;
+
+        Node node = map.get(key);
+        int prevFreq = node.cnt;
+        DLList prevList = freq.get(prevFreq);
+        prevList.remove(node);
+
+        int curFreq = prevFreq + 1;
+        maxFreq = Math.max(maxFreq, curFreq);
+        DLList curList = freq.getOrDefault(curFreq, new DLList());
+        node.cnt++;
+        curList.addHead(node);
+
+        freq.put(prevFreq, prevList);
+        freq.put(curFreq, curList);
+        return node.val;
     }
-    
+
     public void put(int key, int value) {
-        if (capacity <= 0) return;
-        
-        if (keyToVal.containsKey(key)) {
-            keyToVal.put(key, value); // update key's value
-            get(key); // update key's count
+        if (capacity == 0) return;
+        if (map.get(key) != null) {
+            map.get(key).val = value;
+            get(key);
             return;
-        } 
+        }
+
+        Node node = new Node(key, value);
+        DLList curList = freq.getOrDefault(1, new DLList());
+        curList.addHead(node);
+        size++;
+        freq.put(1, curList);
+
+        if (size > capacity) {
+            if (curList.len > 1) {
+                curList.removeTail();
+            } else {
+                for (int i = 2; i <= maxFreq; i++) {
+                    if (freq.get(i) != null && freq.get(i).len > 0) {
+                        freq.get(i).removeTail();
+                        break;
+                    }
+                }
+            }
+
+            size--;
+        }
+
         
-        if (keyToVal.size() >= capacity)
-            evict(countToLRUKeys.get(min).iterator().next()); // evict LRU from this min count bucket
-        
-        min = 1;
-        putCount(key, min); // adding new key and count
-        keyToVal.put(key, value); // adding new key and value
-    }
-    
-    private void evict(int key) {
-        countToLRUKeys.get(min).remove(key);
-        keyToVal.remove(key);
-    }
-    
-    private void putCount(int key, int count) {
-        keyToCount.put(key, count);
-        countToLRUKeys.computeIfAbsent(count, ignore -> new LinkedHashSet<>());
-        countToLRUKeys.get(count).add(key);
     }
 }
-
-/**
- * Your LFUCache object will be instantiated and called as such:
- * LFUCache obj = new LFUCache(capacity);
- * int param_1 = obj.get(key);
- * obj.put(key,value);
- */
