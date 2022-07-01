@@ -14,22 +14,25 @@
  * }
  */
 class Solution {
+    int[] preorder, inorder;
+    int idx;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        //preorder to set the root
-        //inorder to determine the number of nodes
-        int n = preorder.length;
-        Map<Integer, Integer> inorderMap = new HashMap<>();
-        for(int i = 0; i < n; i++) inorderMap.put(inorder[i], i);
-        return constructTree(preorder, inorder, inorderMap, 0, n - 1, 0, n - 1);
+        this.preorder = preorder;
+        this.inorder = inorder;
+        int n = inorder.length;
+    
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < n; i++) map.put(inorder[i], i);
+        
+        return dfs(0, n - 1, map);
     }
-    public TreeNode constructTree(int[] preorder, int[] inorder, Map<Integer, Integer> inorderMap, int pStart, int pEnd, int iStart, int iEnd) {
-        if(pStart > pEnd) return null;
-        int rootIdx = inorderMap.get(preorder[pStart]);
-        int leftNum = rootIdx - iStart;
-        int rightNum = iEnd - rootIdx;
-        TreeNode root = new TreeNode(preorder[pStart]);
-        root.left = constructTree(preorder, inorder, inorderMap, pStart + 1, pStart + leftNum, iStart, rootIdx - 1);
-        root.right = constructTree(preorder, inorder, inorderMap, pStart + leftNum + 1, pEnd, rootIdx + 1, iEnd);
+    TreeNode dfs(int istart, int iend, Map<Integer, Integer> map) {
+        if(istart > iend) return null;
+        TreeNode root = new TreeNode(preorder[idx]);
+        idx++;
+        int inorderIdx = map.get(root.val);
+        root.left = dfs(istart, inorderIdx - 1, map);
+        root.right = dfs(inorderIdx + 1, iend, map);
         return root;
     }
 }
