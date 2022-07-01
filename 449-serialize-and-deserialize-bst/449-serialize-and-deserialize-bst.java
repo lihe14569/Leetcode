@@ -18,7 +18,6 @@ public class Codec {
     }
     void dfs1(TreeNode root, StringBuilder sb) {
         if(root == null) {
-            sb.append("#,");
             return;
         }
         sb.append(root.val + ",");
@@ -31,14 +30,17 @@ public class Codec {
     public TreeNode deserialize(String data) {
         if(data == null || data.length() == 0) return null;
         Queue<String> q = new LinkedList<>(Arrays.asList(data.split(",")));
-        return dfs2(q);
+        return dfs2(q, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
-    TreeNode dfs2(Queue<String> q) {
-        String s = q.poll();
-        if(s.equals("#")) return null;
-        TreeNode node = new TreeNode(Integer.valueOf(s));
-        node.left = dfs2(q);
-        node.right = dfs2(q);
+    TreeNode dfs2(Queue<String> q, int min, int max) {
+        if(q.isEmpty()) return null;
+        String s = q.peek();
+        int val = Integer.valueOf(s);
+        if(val < min || val > max) return null;
+        TreeNode node = new TreeNode(val);
+        q.poll();
+        node.left = dfs2(q, min, val);
+        node.right = dfs2(q, val, max);
         return node;
     }
 }
