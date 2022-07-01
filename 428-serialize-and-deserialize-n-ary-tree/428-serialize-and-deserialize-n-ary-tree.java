@@ -20,34 +20,38 @@ class Node {
 class Codec {
     // Encodes a tree to a single string.
     public String serialize(Node root) {
-        List<String> list = new ArrayList<>();
-        dfs1(root, list);
-        return String.join(",", list);
+        if(root == null) return "";
+        StringBuilder sb = new StringBuilder();
+        dfs1(root, sb);
+        return sb.toString();
     }
-    public void dfs1(Node root, List<String> list) {
-        //base case
-        if(root == null) return;
-        list.add(String.valueOf(root.val));
-        list.add(String.valueOf(root.children.size()));
+    void dfs1(Node root, StringBuilder sb) {
+        if(root == null) {
+            sb.append("#,");
+            return;
+        }
+        sb.append(root.val + ",");
+        sb.append(root.children.size() + ",");
         for(Node child : root.children) {
-            dfs1(child, list);
+            dfs1(child, sb);
         }
     }
 	
     // Decodes your encoded data to tree.
     public Node deserialize(String data) {
-        if(data.equals("")) return null;
+        if(data == null || data.length() == 0) return null;
         Queue<String> q = new LinkedList<>(Arrays.asList(data.split(",")));
         return dfs2(q);
     }
-    public Node dfs2(Queue<String> q) {
+    Node dfs2(Queue<String> q) {
         String s = q.poll();
-        Node root = new Node(Integer.parseInt(s), new ArrayList<>());
-        int size = Integer.parseInt(q.poll());
+        if(s.equals("#")) return null;
+        Node node = new Node(Integer.valueOf(s), new ArrayList<>());
+        int size = Integer.valueOf(q.poll());
         for(int i = 0; i < size; i++) {
-            root.children.add(dfs2(q));
+            node.children.add(dfs2(q));
         }
-        return root;
+        return node;
     }
 }
 
