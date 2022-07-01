@@ -10,15 +10,37 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
-        List<Integer> lst = new ArrayList<>();
-        for(ListNode curr = head; curr != null; curr = curr.next) {
-            lst.add(curr.val);
+        //divide and conquer
+        if(head == null || head.next == null) return head;
+        //divide list in half
+        ListNode slow = head, fast = head.next;
+        while(fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
         }
-        Collections.sort(lst);
-        int i = 0;
-        for(ListNode curr = head; curr != null; curr = curr.next) {
-            curr.val = lst.get(i++);
+        ListNode mid = slow.next;
+        slow.next = null;
+        ListNode left = sortList(head);
+        ListNode right = sortList(mid);
+        return merge(left, right);
+    }
+    public ListNode merge(ListNode l, ListNode r) {
+        if(l == null) return r;
+        if(r == null) return l;
+        ListNode dummy = new ListNode(-1);
+        ListNode curr = dummy;
+        while(l != null && r != null) {
+            if(l.val <= r.val) {
+                curr.next = l;
+                l = l.next;
+            } else {
+                curr.next = r;
+                r = r.next;
+            }
+            curr = curr.next;
         }
-        return head;
+        if(l != null) curr.next = l;
+        if(r != null) curr.next = r;
+        return dummy.next;
     }
 }
