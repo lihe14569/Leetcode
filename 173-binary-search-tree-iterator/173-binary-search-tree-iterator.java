@@ -33,11 +33,11 @@ class BSTIterator {
     }
     
     public boolean hasNext() {
-        while(root != null) {
-            stack.push(root);
-            root = root.left;
-        }
-        return !stack.isEmpty();
+        // while(root != null) {
+        //     stack.push(root);
+        //     root = root.left;
+        // }
+        return root != null || !stack.isEmpty();
     }
 }
 
