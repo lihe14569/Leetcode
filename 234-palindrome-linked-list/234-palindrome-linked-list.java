@@ -8,34 +8,32 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-
-//1. find the midpoint, reverse the right half
-//2. compare
 class Solution {
     public boolean isPalindrome(ListNode head) {
-        ListNode fast = head, slow = head;
+        if(head == null || head.next == null) return true;
+        ListNode slow = head, fast = slow.next;
         while(fast != null && fast.next != null) {
-            fast = fast.next.next;
             slow = slow.next;
+            fast= fast.next.next;
         }
-        if(fast != null) slow = slow.next;
-        fast = reverse(slow);
+        ListNode mid = slow.next;
+        slow.next = null;
+        fast = reverse(mid);
         slow = head;
         while(fast != null) {
-            if(fast.val != slow.val) return false;
-            fast = fast.next;
+            if(fast.val != slow.val)
+                return false;
             slow = slow.next;
+            fast= fast.next;
         }
         return true;
     }
     public ListNode reverse(ListNode head) {
-        ListNode prev = null, curr = head;
-        while(curr != null) {
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
+        if(head == null || head.next == null) return head;
+        ListNode next =  head.next;
+        ListNode newHead = reverse(next);
+        next.next = head;
+        head.next = null;
+        return newHead;
     }
 }
