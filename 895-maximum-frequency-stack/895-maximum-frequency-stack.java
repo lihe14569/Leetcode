@@ -1,25 +1,26 @@
 class FreqStack {
-    Map<Integer, Integer> freq; 
-    Map<Integer, Stack<Integer>> freqMap; 
-    int maxFreq;
+    Map<Integer, Integer> freq;
+    Map<Integer, Stack<Integer>> map;
+    int max;
     public FreqStack() {
         freq = new HashMap<>();
-        freqMap = new HashMap<>();
-        maxFreq = 0;
+        map = new HashMap<>();
+        max = 0;
     }
     
     public void push(int val) {
         int f = freq.getOrDefault(val, 0) + 1;
         freq.put(val, f);
-        maxFreq = Math.max(maxFreq, f);
-        freqMap.computeIfAbsent(f, s -> new Stack()).push(val);
+        max = Math.max(max, f);
+        map.computeIfAbsent(f, s -> new Stack<>()).push(val);
+        
     }
     
     public int pop() {
-        int num = freqMap.get(maxFreq).pop();
-        freq.put(num, maxFreq - 1);
-        if(freqMap.get(maxFreq).size() == 0)
-            maxFreq--;
+        int num = map.get(max).pop();
+        freq.put(num, max - 1);
+        if(map.get(max).isEmpty())
+            max--;
         return num;
     }
 }
