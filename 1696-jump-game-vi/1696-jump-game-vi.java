@@ -3,19 +3,19 @@ class Solution {
         int n = nums.length;
         int[] score = new int[n];
         score[0] = nums[0];
-        Deque<Integer> dq = new LinkedList<>();
-        dq.offerLast(0);
-        for (int i = 1; i < n; i++) {
-            // pop the old index
-            while (dq.peekFirst() != null && dq.peekFirst() < i - k) {
-                dq.pollFirst();
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offerLast(0);
+        for(int i = 1; i < n; i++) {
+            //pop old element
+            while(!q.isEmpty() && q.peekFirst() < i - k) {
+                q.pollFirst();
             }
-            score[i] = score[dq.peek()] + nums[i];
-            // pop the smaller value
-            while (dq.peekLast() != null && score[i] >= score[dq.peekLast()]) {
-                dq.pollLast();
+            score[i] = score[q.peekFirst()] + nums[i];
+            //maintain decreasing
+            while(!q.isEmpty() && score[i] >= score[q.peekLast()]) {
+                q.pollLast();
             }
-            dq.offerLast(i);
+            q.offerLast(i);
         }
         return score[n - 1];
     }
