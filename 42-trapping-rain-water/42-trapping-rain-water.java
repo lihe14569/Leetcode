@@ -5,7 +5,7 @@ class Solution {
         int l = 0, r = n - 1;
         int lmax = height[0], rmax = height[n - 1];
         while(l <= r) {
-            if(lmax <= rmax) {
+            if(height[l] <= height[r]) {
                 if(height[l] <= lmax) {
                     res += lmax - height[l];
                 } else {
