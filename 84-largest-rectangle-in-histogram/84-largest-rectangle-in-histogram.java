@@ -1,21 +1,19 @@
 class Solution {
-    public int largestRectangleArea(int[] h) {
-        int res = 0;
-        int n = h.length;
+    public int largestRectangleArea(int[] hs) {
+        int n = hs.length;
         Deque<Integer> stack = new ArrayDeque<>();
         stack.push(-1);
+        int res = 0;
         for(int i = 0; i < n; i++) {
-            while(stack.peek() != -1 && h[i] < h[stack.peek()]) {
+            while(stack.peek() != -1 && hs[i] < hs[stack.peek()]) {
                 int l = stack.pop();
-                res = Math.max(res, (i - stack.peek() - 1) * h[l]);
+                res = Math.max(res, (i - stack.peek() - 1) * hs[l]);
             }
             stack.push(i);
         }
-        //corner case: 一直是递增的序列
         while(stack.peek() != -1) {
-            int ht = h[stack.pop()];
-            int w = n - stack.peek() - 1;
-            res = Math.max(res, ht * w);
+            int low = stack.pop();
+            res = Math.max(res, (n - stack.peek() - 1) * hs[low]);
         }
         return res;
     }
