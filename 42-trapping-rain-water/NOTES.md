@@ -1,14 +1,3 @@
-<img src="https://leetcode.com/problems/trapping-rain-water/Figures/42/trapping_rain_water.png" alt="drawing" width="600"/>
-}
-```
-​
-# 方法二： two pointer
-```
-class Solution {
-public int trap(int[] height) {
-int n = height.length;
-int l = 0, r = n - 1;
-int lmax = height[0], rmax = height[n - 1];
 int res = 0;
 while(l < r) {
 if(height[l] < height[r]) {
@@ -47,20 +36,4 @@ stack.push(i);
 return res;
 }
 ```
-​
-python 单调栈解法
-```
-def trap(self, height: List[int]) -> int:
-res, stack = 0, []
-for i in range(len(height)):
-while stack and height[i] > height[stack[-1]]:
-l = stack.pop()
-if not stack:
-break
-h = min(height[i], height[stack[-1]])
-res += (i - stack[-1] - 1) * (h - height[l])
-stack.append(i)
-return res
-```
-​
 ​
