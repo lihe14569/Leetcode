@@ -1,27 +1,26 @@
 class Solution {
     public String removeKdigits(String num, int k) {
-        //单调栈
-        Stack<Character> stack = new Stack<>();
-        for(char c : num.toCharArray()) {
-            while(!stack.isEmpty() && c < stack.peek() && k > 0) {
-                stack.pop();
-                k--;
+        Deque<Character> stack = new ArrayDeque<>();
+        int cnt = 0;
+        for(int i = 0; i < num.length(); i++) {
+            char c1 = num.charAt(i);
+            while(!stack.isEmpty() && c1 < stack.peekLast() && cnt < k) {
+                stack.pollLast();
+                cnt++;
             }
-            stack.push(c);
+            stack.offerLast(c1);
         }
-        while(k > 0 && !stack.isEmpty()) {
-            k--;
-            stack.pop();
+        //remove exactly k character
+        while(cnt < k && !stack.isEmpty()) {
+            stack.pollLast();
+            cnt++;
         }
-        
         StringBuilder sb = new StringBuilder();
-        boolean zero = true;
+        
         for(char c : stack) {
-            if(c == '0' && zero) continue;
-            else zero = false;
+            if(sb.isEmpty() && c == '0') continue;
             sb.append(c);
         }
-        return sb.length() == 0 ? "0" : sb.toString();
-        
+        return sb.isEmpty() ? "0" : sb.toString();
     }
 }
