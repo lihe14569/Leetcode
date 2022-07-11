@@ -9,13 +9,13 @@ class TwoSum {
     }
     
     public boolean find(int value) {
-        if(map.size() == 0) return false;
         for(int k : map.keySet()) {
-            int j = value - k;
-            if(map.containsKey(j)){
-                if(j == k && map.get(k) > 1) return true;
-                else if(j != k) return true;
-            } 
+            if(map.containsKey(value - k) ) {
+                if(k != value - k) return true;
+                else if(k == value- k) {
+                    if(map.get(k) > 1) return true;
+                }
+            }
         }
         return false;
     }
