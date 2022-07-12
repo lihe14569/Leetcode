@@ -1,44 +1,43 @@
 class WordDictionary {
-    class Trie {
-        Trie[] children;
-        boolean isWord;
-        
-        public Trie() {
-            children = new Trie[26];
-            isWord = false;
-        }
-     }
-    Trie root;
+    Node root;
     public WordDictionary() {
-        root = new Trie();
+        root = new Node();
     }
     
     public void addWord(String word) {
-        Trie node = this.root;
+        Node node = root;
         for(char c : word.toCharArray()) {
-            if(node.children[c - 'a'] == null) node.children[c -'a'] = new Trie();
+            if(node.children[c - 'a'] == null) node.children[c - 'a'] = new Node();
             node = node.children[c - 'a'];
         }
-        node.isWord = true;
+        node.isWord= true;
     }
     
     public boolean search(String word) {
         return dfs(word, 0, root);
     }
-    
-    public boolean dfs(String word, int i, Trie root) {
-        Trie node = root;
-        if(i == word.length()) return root.isWord;
-        char c = word.charAt(i);
+    public boolean dfs(String word, int index, Node root) {
+        if(index == word.length()) return root.isWord;
+        Node node = root;
+        char c = word.charAt(index);
         if(c == '.') {
-            for(int j = 0; j < 26; j++) {
-                if(node.children[j] == null) continue;
-                if(node.children[j] != null && dfs(word, i + 1, node.children[j])) return true;
+            for(int i = 0; i < 26; i++) {
+                if(node.children[i] != null && dfs(word, index + 1, node.children[i]))
+                    return true;
             }
             return false;
         } else {
             if(node.children[c - 'a'] == null) return false;
-            return dfs(word, i + 1, node.children[c - 'a']);
+            return dfs(word, index + 1, node.children[c - 'a']);
+        }
+    }
+    
+    class Node {
+        Node[] children;
+        boolean isWord;
+        public Node() {
+            children = new Node[26];
+            isWord = false;
         }
     }
 }
