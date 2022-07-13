@@ -1,78 +1,79 @@
 class LRUCache {
-    class Node{
-        int key;
-        int val;
-        Node prev;
-        Node next;
-        public Node(){}
-        public Node(int key, int val) {
-            this.key = key;
-            this.val = val;
-        }
-    }
-    int capacity;
-    int size;
+    Map<Integer, Node> map;
     Node head, tail;
-    Map<Integer, Node> map; 
+    int size, capacity;
     
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        size = 0;
+        map = new HashMap<>();
         head = new Node();
         tail = new Node();
         head.next = tail;
         tail.prev = head;
-        map = new HashMap<>();
+        size = 0;
+        this.capacity = capacity;
     }
     
     public int get(int key) {
-        Node node = map.get(key);
-        if(node == null) {
-            return -1;
-        } else {
-            int res = node.val;
-            moveHead(node);
-            return res;
-        }
+        if(map.containsKey(key)) {
+            Node node = map.get(key);
+            moveToHead(node);
+            return node.val;
+        } 
+        return -1;
     }
-    public void moveHead(Node node) {
-        removeNode(node);
-        addHead(node);
+    
+    public void moveToHead(Node node) {
+        remove(node);
+        addToHead(node);
     }
-    public void removeNode(Node node) {
+    
+    public void remove(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
-    public void addHead(Node node) {
+    
+     public void addToHead(Node node) {
         node.next = head.next;
         node.prev = head;
+        head.next.prev = node;
         head.next = node;
-        node.next.prev = node;
     }
-    public void put(int key, int value) {
-        Node node = map.get(key);
-        if(node == null) {
-            node = new Node(key, value);
-            addHead(node);
-            map.put(key, node);
-            size++;
-            if(size > capacity) {
-                Node rTail = removeTail();
-                map.remove(rTail.key);
-                size--;
-            }
-        } else{
-            node.val = value;
-            moveHead(node);
-        }
-    }
+    
     public Node removeTail() {
         Node node = tail.prev;
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
+        remove(node);
         return node;
     }
     
+    public void put(int key, int value) {
+        //1. exist, update value, move to head
+        //2. not exist, add node to head, update map. if exceeds the capacity, evict last node
+        if(map.containsKey(key)) {
+            Node node = map.get(key);
+            node.val = value;
+            moveToHead(node);
+        } else {
+            Node node = new Node(key, value);
+            addToHead(node);
+            map.put(key, node);
+            size++;
+            if(size > capacity) {
+                Node rmNode = removeTail();
+                map.remove(rmNode.key);
+                size--;
+            }
+        }
+    }
+   
+}
+class Node {
+    int key, val;
+    Node next, prev;
+    public Node(){};
+    public Node(int key, int val) {
+        this.key = key;
+        this.val = val;
+    }
 }
 
 /**
