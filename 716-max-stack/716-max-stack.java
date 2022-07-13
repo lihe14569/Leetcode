@@ -1,38 +1,42 @@
 class MaxStack {
-
-    Node head;
-    Node tail;
     TreeMap<Integer, List<Node>> map;
-    
+    Node head, tail;
     public MaxStack() {
-        head = new Node(0);
-        tail = new Node(0);
-        head.next = tail;
-        tail.pre = head;
         map = new TreeMap<>();
+        head = new Node(-1);
+        tail = new Node(-1);
+        head.next = tail;
+        tail.prev = head;
     }
     
     public void push(int x) {
-        Node newNode = new Node(x);
-        newNode.pre = tail.pre;
-        newNode.next = tail;
-        tail.pre.next = newNode;
-        tail.pre = newNode;
-        if(!map.containsKey(x))    map.put(x, new ArrayList<Node>());
-        map.get(x).add(newNode);
+        Node node = new Node(x);
+        node.next = tail;
+        node.prev = tail.prev;
+        tail.prev.next = node;
+        tail.prev = node;
+        if(!map.containsKey(x)) {
+            map.put(x, new ArrayList<>());
+        }
+        map.get(x).add(node);
     }
     
     public int pop() {
-        int value = tail.pre.val;
-        removeNode(tail.pre);
-        int listSize = map.get(value).size();
-        map.get(value).remove(listSize - 1);
-        if(listSize == 1)    map.remove(value);
-        return value;
+        Node node = tail.prev;
+        int popVal = node.val;
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+        
+        List<Node> lst = map.get(popVal);
+        lst.remove(lst.size() - 1);
+        if(lst.size() == 0)
+            map.remove(popVal);
+        
+        return popVal;
     }
     
     public int top() {
-        return tail.pre.val;
+        return tail.prev.val;
     }
     
     public int peekMax() {
@@ -40,29 +44,33 @@ class MaxStack {
     }
     
     public int popMax() {
-        int maxVal = map.lastKey();
-        int listSize = map.get(maxVal).size();
-        Node node = map.get(maxVal).remove(listSize - 1);
+        int popval = peekMax();
+        List<Node> lst = map.get(popval);
+        Node node = lst.remove(lst.size() - 1);
         removeNode(node);
-        if(listSize == 1)    map.remove(maxVal);
-        return maxVal;
+        if(lst.size() == 0) map.remove(popval);
+        return popval;
     }
-    
-    private void removeNode(Node n){
-        Node preNode = n.pre;
-        Node nextNode = n.next;
-        preNode.next = nextNode;
-        nextNode.pre = preNode;
+    public void removeNode(Node node) {
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
     }
-    
-    class Node{
-        Node pre;
-        Node next;
-        int val;
-        public Node(int x){
-            this.val = x;
-            this.pre = null;
-            this.next = null;
-        }
+
+}
+class Node {
+    int val;
+    Node next, prev;
+    public Node(int val) {
+        this.val = val;
     }
 }
+
+/**
+ * Your MaxStack object will be instantiated and called as such:
+ * MaxStack obj = new MaxStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.peekMax();
+ * int param_5 = obj.popMax();
+ */
