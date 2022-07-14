@@ -14,17 +14,17 @@
  * }
  */
 class Solution {
-    int i = 0;
+    int idx = 0;
     public TreeNode bstFromPreorder(int[] preorder) {
-        if(preorder == null || preorder.length == 0)
-            return null;
-        return dfs(preorder, Integer.MAX_VALUE);
+        return dfs(preorder, null, null);
     }
-    TreeNode dfs(int[] nums, int upper) {
-        if(i == nums.length || nums[i] > upper) return null;
-        TreeNode root = new TreeNode(nums[i++]);
-        root.left = dfs(nums, root.val);
-        root.right = dfs(nums, upper);
+    public TreeNode dfs(int[] preorder, Integer min, Integer max) {
+        if(idx == preorder.length) return null;
+        if((min != null && preorder[idx] <= min)||(max != null && preorder[idx] >= max)) return null;
+        TreeNode root = new TreeNode(preorder[idx]);
+        idx++;
+        root.left = dfs(preorder, min, root.val);
+        root.right = dfs(preorder, root.val, max);
         return root;
     }
 }
