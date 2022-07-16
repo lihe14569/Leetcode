@@ -1,28 +1,30 @@
 class Solution {
-    public double findMedianSortedArrays(int[] n1, int[] n2) {
-        int m = n1.length, n = n2.length;
-        if(m > n) return findMedianSortedArrays(n2, n1);
-        int k = (m + n +1) / 2;
-        int l = 0, r = m;
-        while(l < r) {
-            int m1 = l + (r - l) / 2;
-            int m2 = k - m1;
-            if(n1[m1] < n2[m2 - 1])
-                l = m1 + 1;
-            else
-                r = m1;
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length, n = nums2.length;
+        int tot = m + n;
+        if(tot % 2 == 0) {
+            int left = find(nums1, 0, nums2, 0, tot / 2);
+            int right = find(nums1, 0, nums2, 0, tot / 2 + 1);
+            return (double)(left + right) / 2.0;
+        } else {
+            return (double) find(nums1, 0, nums2, 0, tot / 2 + 1);
         }
-        int m1 = l, m2 = k - l;
-        int mid1 = m1 == 0 ? Integer.MIN_VALUE : n1[m1 - 1];
-        int mid2 = m2 == 0 ? Integer.MIN_VALUE : n2[m2 - 1];
-        
-        double c1 = (double)Math.max(mid1, mid2);
-        if((m + n) % 2 == 1) return c1;
-        
-        int mid3 = m1 == m ? Integer.MAX_VALUE : n1[m1];
-        int mid4 = m2 == n ? Integer.MAX_VALUE : n2[m2];
-        
-        double c2 = (double) Math.min(mid3, mid4);
-        return (c1 + c2) / 2.0;
+    }
+    public int find(int[] nums1, int i, int[] nums2, int j, int k) {
+        if(nums1.length - i > nums2.length - j) return find(nums2, j, nums1, i, k);
+        //corner case
+        if(k == 1) {
+            if(nums1.length == i) return nums2[j];
+            //??为什么要求min
+            else return Math.min(nums1[i], nums2[j]);
+        }
+        //特判的情况，nums1是空
+        if(nums1.length == i) return nums2[j + k - 1];
+        int si = Math.min(nums1.length, i + k / 2), sj = j + k - k / 2;
+        if(nums1[si - 1] < nums2[sj - 1]) {
+            return find(nums1, si, nums2, j, k - (si - i));
+        } else {
+            return find(nums1, i, nums2, sj, k - (sj - j));
+        }
     }
 }
