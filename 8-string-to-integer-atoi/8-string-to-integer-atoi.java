@@ -1,31 +1,29 @@
 class Solution {
     public int myAtoi(String s) {
-        //1.ignore whiltespace
-        if(s ==null || s.length() == 0) return 0;
         int i = 0;
-        int sign = 1;
-        while(i < s.length() && s.charAt(i) == ' ' ) i++;
-        //2.check positive/negative
+        while(i < s.length() && s.charAt(i) == ' ') i++;
+        int neg = 1;
         if(i < s.length() && s.charAt(i) == '-') {
-            sign = -1;
+            neg = -1;
             i++;
         } else if(i < s.length() && s.charAt(i) == '+') {
+            neg = 1;
             i++;
         }
-                                                  
-        //3.read next character until non-digit character reached
-        int num = 0;
+    
+        int res = 0;
         while(i < s.length() && s.charAt(i) >= '0' && s.charAt(i) <= '9') {
-            int curr = s.charAt(i) - '0';
-             //4.if overflow, clamp to in range
-            if(num > Integer.MAX_VALUE / 10 || (num == Integer.MAX_VALUE / 10 && curr > Integer.MAX_VALUE % 10)) {
-                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            }
-            num = num * 10 + curr;
+            int x = s.charAt(i) - '0';
+            if(neg > 0 && res > (Integer.MAX_VALUE - x) / 10) return Integer.MAX_VALUE;
+            if(neg < 0 && -res < (Integer.MIN_VALUE + x) / 10) return Integer.MIN_VALUE;
+            if(-res * 10 - x == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            res  = res * 10 + x;
             i++;
+            if(res > Integer.MAX_VALUE) break;
         }
-        
-        //5.return value
-        return sign * num;
+        res = res * neg;
+        if(res > Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        if(res < Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        return res;
     }
 }
