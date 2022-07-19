@@ -1,24 +1,22 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
-        for(int i = 0;i < nums.length - 2; i++) {
-            if(i != 0 && nums[i] == nums[i - 1]) continue;
-            int first = nums[i];
-            if(first > 0) return res;
-            int j = i + 1, k = nums.length - 1;
-            while(j < k) {
-                
-                int sum = nums[j] + nums[k] + first;
-                if(sum == 0)  {
-                    res.add(List.of(first, nums[j], nums[k]));
-                    j++;
-                    k--;
-                    while(j < k && nums[j] == nums[j - 1]) j++;
-                    while(j < k && nums[k] == nums[k + 1]) k--;
+        Arrays.sort(nums);
+        for(int i = 0; i < nums.length - 2; i++ ) {
+            if(i != 0 && nums[i] == nums[i - 1])continue;
+            int l = i + 1, r = nums.length - 1;
+            while(l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if(sum == 0) {
+                  res.add(List.of(nums[i], nums[l], nums[r]));
+                    l++;
+                    r--;
+                    while(l < r && nums[l] == nums[l - 1]) l++;
+                    while(l <  r && nums[r] == nums[r + 1]) r--;
                 }
-                else if(sum < 0) j++;
-                else k--;
+                else if(sum < 0) l++;
+                else r--;
+                
             }
         }
         return res;
