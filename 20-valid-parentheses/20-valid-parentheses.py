@@ -1,6 +1,6 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        stack= []
+        stack = []
         for c in s:
             if c == '(':
                 stack.append(')')
@@ -8,6 +8,6 @@ class Solution:
                 stack.append(']')
             elif c == '{':
                 stack.append('}')
-            elif not stack or c != stack.pop():
+            elif not stack or stack.pop() != c:
                 return False
         return not stack
