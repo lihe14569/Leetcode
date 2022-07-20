@@ -18,7 +18,7 @@ class Solution {
         int mid = start + (end - start) / 2;
         ListNode left = divide(lists, start, mid);
         ListNode right = divide(lists, mid + 1, end);
-        return merge(left, right);
+        return merge1(left, right);
     } 
     public ListNode merge(ListNode l1, ListNode l2) {
         ListNode dummy = new ListNode(-1);
@@ -36,5 +36,16 @@ class Solution {
         if(l1 != null) curr.next = l1;
         else curr.next = l2;
         return dummy.next;
+    }
+    public ListNode merge1(ListNode l1, ListNode l2) {
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        if(l1.val <= l2.val) {
+            l1.next = merge1(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = merge1(l2.next, l1);
+            return l2;
+        }
     }
 }
