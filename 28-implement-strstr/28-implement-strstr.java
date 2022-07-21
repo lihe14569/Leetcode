@@ -1,12 +1,12 @@
 class Solution {
     public int strStr(String s, String p) {
-        if(p == null || p.length() == 0) return 0;
+        //kmp
         int m = s.length(), n = p.length();
-        s = " " + s;
-        p = " " + p;
-        
+        s = ' '+ s;
+        p = ' ' + p;
+        //next代表从 1 到 i 区间里的前缀和后缀相同的最长子字符串的长度
         int[] next = new int[n + 1];
-        
+        //not its self, so next[1] = 0, for loop i starts from 2
         for(int i = 2, j = 0; i <= n; i++) {
             while(j != 0 && p.charAt(i) != p.charAt(j + 1)) j = next[j];
             if(p.charAt(i) == p.charAt(j + 1)) j++;
