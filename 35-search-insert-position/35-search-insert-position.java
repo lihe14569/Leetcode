@@ -1,17 +1,21 @@
 class Solution {
-    public int searchInsert(int[] nums, int target) {
-        //
-        int n = nums.length;
-        if(nums[n - 1] < target) return n;
-        int left = 0, right = n - 1;
-        while(left < right) {
-            int mid = left + (right - left) / 2 ;
-            if(nums[mid] >= target) {
-                right = mid;
-            } else {
-                left = mid + 1;
+    public boolean isValidSudoku(char[][] board) {
+        
+        for(int i = 0; i < 9; i++) {
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> block = new HashSet<>();
+            for(int j = 0; j < 9; j++) {
+                if(board[i][j] != '.' && !row.add(board[i][j]))
+                    return false;
+                if(board[j][i] != '.' && !col.add(board[j][i]))
+                    return false;
+                int x = 3*(i/3) + j/3;
+                int y = 3*(i%3) + j%3;
+                if(board[x][y] != '.' && !block.add(board[x][y]))
+                    return false;
             }
         }
-        return left;
+        return true;
     }
 }
