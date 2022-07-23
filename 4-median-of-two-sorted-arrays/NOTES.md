@@ -1,25 +1,46 @@
-binary search :注意， m1和m2代表的是从数组中取出的个数，第m1个对应的是m1 - 1 index
-```
-public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-int m = nums1.length, n = nums2.length;
-if(m > n) return findMedianSortedArrays(nums2, nums1);
-int k = (m + n + 1) / 2;
-int l  = 0, r = m; //注意：l,r边界代表的个数，不是index!!!
-while(l < r) {
-int m1 = (l + r) /2;
-int m2 = k - m1;
-if(nums1[m1] < nums2[m2 - 1]) {
-l = m1 + 1;
+//corner case
+if(k == 1) {
+if(nums1.length == i) return nums2[j];
+//??为什么要求min
+//因为k=1，即两个有序数组的第一个数，那就是两个数组各自第一个数里面的最小数
+else return Math.min(nums1[i], nums2[j]);
+}
+//特判的情况，初始的index正好是nums1的长度，nums1是空，只需取nums2的第k位即可
+if(nums1.length == i) return nums2[j + k - 1];
+//注意：si，sj是第 k/2位的后一位的index。
+//用nums1数组来举例，可以理解为[i, si - 1]和[si, nums1.length]
+int si = Math.min(nums1.length, i + k / 2), sj = j + k - k / 2;
+if(nums1[si - 1] < nums2[sj - 1]) {
+return find(nums1, si, nums2, j, k - (si - i));
 } else {
-r = m1;
+return find(nums1, i, nums2, sj, k - (sj - j));
 }
 }
-int m1 = l, m2 = k - l;
-int mid1 = m1 <= 0 ? Integer.MIN_VALUE : nums1[m1 - 1]; //不从num1中取元素
-int mid2 = m2 <= 0 ? Integer.MIN_VALUE : nums2[m2 - 1];
-int c1 = Math.max(mid1, mid2);
-if((m + n)% 2 == 1) return (double)c1;
-int mid3 = m1 >= m ? Integer.MAX_VALUE : nums1[m1];
-int mid4 = m2 >= n ? Integer.MAX_VALUE : nums2[m2];
-int c2 = Math.min(mid3, mid4);
-return (double)(c1 + c2) / 2;
+}
+```
+​
+​
+python divide and conquer method
+```
+class Solution:
+def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+m, n = len(nums1), len(nums2)
+tot = m + n
+if tot % 2 == 0:
+left = self.findM(nums1, 0, nums2, 0, tot // 2)
+right = self.findM(nums1, 0, nums2, 0, tot // 2 + 1)
+return  (left + right) / 2
+else:
+return self.findM(nums1, 0, nums2, 0, tot // 2 + 1)
+def findM(self, nums1, i, nums2, j, k):
+if(len(nums1) - i > len(nums2) - j):
+return self.findM(nums2, j, nums1, i, k)
+if k == 1:
+if i == len(nums1): return nums2[j]
+else: return min(nums1[i], nums2[j])
+if i == len(nums1):
+return nums2[j + k - 1]
+si = min(len(nums1), i + k // 2)
+sj = j + k - k // 2
+if(nums1[si - 1] > nums2[sj - 1]):
+return self.findM(nums1, i, nums2, sj, k - (sj - j))
