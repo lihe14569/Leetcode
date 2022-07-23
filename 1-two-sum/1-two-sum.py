@@ -3,6 +3,6 @@ class Solution:
         map = {}
         for i in range(len(nums)):
             if target - nums[i] in map:
-                return [i, map[target- nums[i]]]
+                return [i, map[target - nums[i]]]
             map[nums[i]] = i
-        return [-1, -1]
+        return [-1, - 1]
