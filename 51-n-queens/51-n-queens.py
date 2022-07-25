@@ -1,30 +1,29 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        matrix = [['.'] * n for _ in range(n)]
+        matrix = [['.']*n for _ in range(n)]
+        cs, ds, ads = set(), set(), set()
         res = []
-        def solve(row, col, diagonal, anti_diagonal, matrix):
-            nonlocal res
-            #base case
+        def solve(row): 
             if row == n:
-                lst = []
-                for c in matrix:
-                    lst.append(''.join(c))
-                res.append(lst)
+                solution = []
+                for col in matrix:
+                    solution.append(''.join(col))
+                res.append(solution)
                 return
             
             for c in range(n):
                 di = row + c
                 adi = row - c
-                if c in col or di in diagonal or adi in anti_diagonal:
+                if c in cs or di in ds or adi in ads:
                     continue
-                col.add(c)
-                diagonal.add(di)
-                anti_diagonal.add(adi)
                 matrix[row][c] = 'Q'
-                solve(row + 1, col, diagonal, anti_diagonal, matrix)
+                cs.add(c)
+                ds.add(di)
+                ads.add(adi)
+                solve(row + 1)
                 matrix[row][c] = '.'
-                col.remove(c)
-                diagonal.remove(di)
-                anti_diagonal.remove(adi)
-        solve(0, set(), set(), set(), matrix)
+                cs.remove(c)
+                ds.remove(di)
+                ads.remove(adi)
+        solve(0)
         return res
