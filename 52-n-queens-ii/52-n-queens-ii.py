@@ -1,23 +1,22 @@
 class Solution:
     def totalNQueens(self, n: int) -> int:
-        def backtrack(row, cols, diagonals, anti_diagonals):
-            #base case
+        cs, ds, ads = set(), set(), set()
+        def backtrack(row):
             if row == n:
                 return 1
-            solutions = 0
-            for col in range(n):
-                diagonal = row + col
-                anti_diagonal = row - col
-                if col in cols or diagonal in diagonals or anti_diagonal in anti_diagonals:
+            solution = 0
+            for c in range(n):
+                di = row + c
+                adi = row - c
+                if c in cs or di in ds or adi in ads:
                     continue
-                cols.add(col)
-                diagonals.add(diagonal)
-                anti_diagonals.add(anti_diagonal)
-                solutions +=backtrack(row + 1, cols, diagonals, anti_diagonals)
-                cols.remove(col)
-                diagonals.remove(diagonal)
-                anti_diagonals.remove(anti_diagonal)
-            return solutions
+                cs.add(c)
+                ds.add(di)
+                ads.add(adi)
+                solution += backtrack(row + 1)
+                cs.remove(c)
+                ds.remove(di)
+                ads.remove(adi)
+            return solution
         
-        return backtrack(0, set(), set(), set())
-        
+        return backtrack(0)
