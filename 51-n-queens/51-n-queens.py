@@ -1,31 +1,30 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        def backtrack(row, cs, ds, ads, state):
+        matrix = [['.'] * n for _ in range(n)]
+        res = []
+        def solve(row, col, diagonal, anti_diagonal, matrix):
             nonlocal res
             #base case
             if row == n:
-                lst= []
-                for s in state:
-                    lst.append(''.join(s))
+                lst = []
+                for c in matrix:
+                    lst.append(''.join(c))
                 res.append(lst)
-                return 
+                return
+            
             for c in range(n):
-                d = row + c
-                ad = row - c
-                if c in cs or d in ds or ad in ads:
+                di = row + c
+                adi = row - c
+                if c in col or di in diagonal or adi in anti_diagonal:
                     continue
-                cs.add(c)
-                ds.add(d)
-                ads.add(ad)
-                state[row][c] = 'Q'
-                backtrack(row + 1, cs, ds, ads, state)
-                cs.remove(c)
-                ds.remove(d)
-                ads.remove(ad)
-                state[row][c] = '.'
-        #create a board
-        board = [['.']*n for _ in range(n)]
-        res = []
-        backtrack(0, set(), set(), set(), board)
+                col.add(c)
+                diagonal.add(di)
+                anti_diagonal.add(adi)
+                matrix[row][c] = 'Q'
+                solve(row + 1, col, diagonal, anti_diagonal, matrix)
+                matrix[row][c] = '.'
+                col.remove(c)
+                diagonal.remove(di)
+                anti_diagonal.remove(adi)
+        solve(0, set(), set(), set(), matrix)
         return res
-        
