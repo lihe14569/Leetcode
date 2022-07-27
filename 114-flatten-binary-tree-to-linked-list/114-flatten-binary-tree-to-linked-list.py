@@ -9,16 +9,17 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
-        def flattenTree(node):
-            if not node:
-                return node
-            if not node.left and not node.right:
-                return node
-            leftTail = flattenTree(node.left)
-            rightTail = flattenTree(node.right)
-            if leftTail:
-                leftTail.right = node.right
+        if not root:
+             return root
+        node = root
+        
+        while node:
+            if node.left:
+                rightMost = node.left
+                while rightMost.right:
+                    rightMost = rightMost.right
+                rightMost.right = node.right
                 node.right = node.left
                 node.left = None
-            return rightTail if rightTail else leftTail
-        flattenTree(root)
+            node = node.right
+            
