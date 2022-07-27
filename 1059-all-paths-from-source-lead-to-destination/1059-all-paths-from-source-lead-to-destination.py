@@ -16,9 +16,7 @@ class Solution:
         return True
         
     def buildGraph(self, edges):
-        graph = {}
+        graph = defaultdict(list)
         for u, v in edges:
-            if u not in graph:
-                graph[u] = []
             graph[u].append(v)
         return graph
