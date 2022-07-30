@@ -1,56 +1,37 @@
 class Solution {
     public List<String> fullJustify(String[] words, int maxWidth) {
-        int left = 0; List<String> result = new ArrayList<>();
-        
-        while (left < words.length) {
-            int right = findRight(left, words, maxWidth);
-            result.add(justify(left, right, words, maxWidth));
-            left = right + 1;
+        List<String> res = new ArrayList<>();
+        for(int i = 0; i < words.length; i++) {
+            int j = i + 1;
+            int len = words[i].length();
+            while(j < words.length && len + 1 + words[j].length() <= maxWidth) {
+                len += 1 + words[j].length();
+                j++;
+            }
+            StringBuilder sb = new StringBuilder();
+            //情况1：左对齐，最后一行或者当前行只有一个单词
+            if(j == words.length || j == i + 1) {
+                sb.append(words[i]);
+                for(int k = i + 1; k < j; k++) sb.append(" " + words[k]);
+                while(sb.length() <  maxWidth) sb.append(" ");
+            } else { //情况2：左右对齐
+                sb.append(words[i]);
+                int cnt = j - i - 1, rest = maxWidth - len + cnt;
+                int k = 0;
+                while(k < rest % cnt) {
+                    sb.append(String.join("", Collections.nCopies(rest / cnt + 1, " ")));
+                    sb.append(words[i + k + 1]);
+                    k++;
+                }
+                while(k < cnt) {
+                    sb.append(String.join("", Collections.nCopies(rest / cnt, " ")));
+                    sb.append(words[i + k + 1]);
+                    k++;
+                }
+            }
+            res.add(sb.toString());
+            i = j - 1;
         }
-        
-        return result;
-    }
-    
-    private int findRight(int left, String[] words, int maxWidth) {
-        int right = left;
-        int sum = words[right++].length();
-        
-        while (right < words.length && (sum + 1 + words[right].length()) <= maxWidth)
-            sum += 1 + words[right++].length();
-            
-        return right - 1;
-    }
-    
-    private String justify(int left, int right, String[] words, int maxWidth) {
-        if (right - left == 0) return padResult(words[left], maxWidth);
-        
-        boolean isLastLine = right == words.length - 1;
-        int numSpaces = right - left;
-        int totalSpace = maxWidth - wordsLength(left, right, words);
-        
-        String space = isLastLine ? " " : blank(totalSpace / numSpaces);
-        int remainder = isLastLine ? 0 : totalSpace % numSpaces;
-        
-        StringBuilder result = new StringBuilder();
-        for (int i = left; i <= right; i++)
-            result.append(words[i])
-                .append(space)
-                .append(remainder-- > 0 ? " " : "");
-        
-        return padResult(result.toString().trim(), maxWidth);
-    }
-    
-    private int wordsLength(int left, int right, String[] words) {
-        int wordsLength = 0;
-        for (int i = left; i <= right; i++) wordsLength += words[i].length();
-        return wordsLength;
-    }
-    
-    private String padResult(String result, int maxWidth) {
-        return result + blank(maxWidth - result.length());
-    }
-    
-    private String blank(int length) {
-        return new String(new char[length]).replace('\0', ' ');
+        return res;
     }
 }
