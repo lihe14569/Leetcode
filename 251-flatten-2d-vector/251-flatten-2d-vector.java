@@ -10,9 +10,8 @@ class Vector2D {
     public int next() {
         if(hasNext()) {
             return vec[i][j++];
-        } else {
-            return -1;
         }
+        return -1;
     }
     
     public boolean hasNext() {
