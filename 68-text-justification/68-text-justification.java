@@ -9,12 +9,13 @@ class Solution {
                 j++;
             }
             StringBuilder sb = new StringBuilder();
-            //情况1：左对齐，最后一行或者当前行只有一个单词
             if(j == words.length || j == i + 1) {
                 sb.append(words[i]);
-                for(int k = i + 1; k < j; k++) sb.append(" " + words[k]);
-                while(sb.length() <  maxWidth) sb.append(" ");
-            } else { //情况2：左右对齐
+                for(int k = i + 1; k < j; k++) {
+                    sb.append(" " + words[k]);
+                }
+                while(sb.length() < maxWidth) sb.append(" ");
+            } else {
                 sb.append(words[i]);
                 int cnt = j - i - 1, rest = maxWidth - len + cnt;
                 int k = 0;
@@ -30,8 +31,9 @@ class Solution {
                 }
             }
             res.add(sb.toString());
+            //update i 
             i = j - 1;
         }
-        return res;
+        return res; 
     }
 }
