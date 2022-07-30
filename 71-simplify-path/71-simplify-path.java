@@ -1,12 +1,15 @@
 class Solution {
     public String simplifyPath(String path) {
-        Stack<String> stack = new Stack<>();
-        String[] strs = path.split("/");
-        for(int i = 0;i < strs.length; i++) {
-            if(!stack.isEmpty() && strs[i].equals(".."))
-                stack.pop();
-            else if(!strs[i].equals(".") && !strs[i].equals("") && !strs[i].equals(".."))
-                stack.push(strs[i]);
+        
+        Deque<String> stack = new ArrayDeque<>();
+        Set<String> skip = new HashSet<>(List.of("", "/", ".", ".."));
+        
+        for(String word : path.split("/")) {
+            if(!stack.isEmpty() && word.equals("..")) stack.removeLast();
+            else if(!skip.contains(word)) stack.offerLast(word);
+        }
+        for(String s : stack) {
+            System.out.println(s);
         }
         return "/" + String.join("/", stack);
     }
