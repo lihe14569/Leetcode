@@ -5,24 +5,33 @@ class Solution {
         int[] m2 = new int[n];
         Arrays.fill(m1, -1);
         Arrays.fill(m2, -1);
-        dfs(node1, 0, edges, m1);
-        dfs(node2, 0, edges, m2);
         
-        int minDist = Integer.MAX_VALUE;
+        bfs(edges, node1, m1);
+        bfs(edges, node2, m2);
+        int minDis = Integer.MAX_VALUE;
         int res = -1;
         for(int i = 0; i < n; i++) {
-            if(m1[i] >= 0 && m2[i] >= 0 && Math.max(m1[i], m2[i]) < minDist) {
-                minDist = Math.max(m1[i], m2[i]);
+            if(m1[i] >= 0 && m2[i] >= 0 && Math.max(m1[i], m2[i]) < minDis) {
+                minDis = Math.max(m1[i], m2[i]);
                 res = i;
             }
         }
         return res;
     }
-    public void dfs(int node, int dist, int[] e, int[] memo) {
-        
-        if(node != -1 && memo[node] == -1) {
-            memo[node] = dist;
-            dfs(e[node], dist + 1, e, memo);
+    public void bfs(int[] edges, int node, int[] memo) {
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(node);
+        Set<Integer> seen = new HashSet<>();
+        int dis = 0;
+        while(!q.isEmpty()) {
+            int curr = q.poll();
+            memo[curr] = dis;
+            seen.add(curr);
+            int nei = edges[curr];
+            if(nei != -1 && !seen.contains(nei)) {
+                q.offer(nei); 
+                dis++;
+            } else break;
         }
     }
 }
