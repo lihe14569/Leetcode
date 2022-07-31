@@ -1,9 +1,9 @@
 class NumArray {
-    class STNode {
+    class Node {
         int start, end;
-        STNode left, right;
+        Node left, right;
         int sum;
-        STNode(int start, int end) {
+        public Node(int start, int end) {
             this.start = start;
             this.end = end;
             left = null;
@@ -11,60 +11,55 @@ class NumArray {
             sum = 0;
         }
     }
-    STNode root;
+    Node root;
     public NumArray(int[] nums) {
-        root = buildTree(nums, 0, nums.length - 1);
+        this.root = buildTree(nums, 0, nums.length - 1);
     }
-    private STNode buildTree(int[] nums, int start, int end) {
-        if(start > end) return null;
-        else{
-            STNode curr = new STNode(start, end);
-            if(start == end) {
-                curr.sum = nums[start];
-            } else {
+    public Node buildTree(int[] nums, int start, int end) {
+        //base case
+        if(start > end) {
+            return null;
+        } else {
+            Node res = new Node(start, end);
+            if(start == end) res.sum = nums[start];
+            else {
                 int mid = start + (end - start) / 2;
-                curr.left = buildTree(nums, start, mid);
-                curr.right = buildTree(nums, mid + 1, end);
-                curr.sum = curr.left.sum + curr.right.sum;
+                res.left = buildTree(nums, start, mid);
+                res.right = buildTree(nums, mid + 1, end);
+                res.sum = res.left.sum + res.right.sum;
             }
-            return curr;
+            return res;
         }
     }
+    
     
     public void update(int index, int val) {
         update(root, index, val);
     }
-    private void update(STNode node, int index, int val) {
-        if(node.start == index && node.end == index) {
-            node.sum = val;
+    public void update(Node root, int index, int val) {
+        if(root.start == root.end) {
+            root.sum = val;
             return;
-        } else {
-            int mid = node.start + (node.end - node.start) / 2;
-            if(index <= mid) {
-                update(node.left, index, val);
-            } else {
-                update(node.right, index, val);
-            }
-            node.sum = node.left.sum + node.right.sum;
         }
-    }
-    private int sumRange(STNode root, int left, int right) {
-        if(root.start == left && root.end == right){
-            return root.sum;
-        } else {
-            int mid = root.start + (root.end - root.start)/ 2;
-            if(right <= mid) {
-                return sumRange(root.left, left, right);
-            } else if(left >= mid + 1) {
-                return sumRange(root.right, left, right);
-            } else {
-                return sumRange(root.left, left, mid) + sumRange(root.right, mid + 1, right);
-            }
-        }
+        int mid = root.start + (root.end - root.start) / 2;
+        if(index <= mid) update(root.left, index, val);
+        else update(root.right, index, val);
+        root.sum = root.left.sum + root.right.sum;
     }
     
     public int sumRange(int left, int right) {
         return sumRange(root, left, right);
+    }
+    public int sumRange(Node root, int left, int right) {
+        if(root.start == left && root.end == right) {
+            return root.sum;
+        }
+        int mid = root.start + (root.end - root.start) / 2;
+        if(left >= mid + 1) return sumRange(root.right, left, right);
+        else if(right <= mid) return sumRange(root.left, left, right);
+        else {
+            return sumRange(root.left, left, mid) + sumRange(root.right, mid + 1, right);
+        }
     }
 }
 
