@@ -1,9 +1,9 @@
 class NumArray {
-    class Node {
+    class SegmentTreeNode {
         int start, end;
-        Node left, right;
+        SegmentTreeNode left, right;
         int sum;
-        public Node(int start, int end) {
+        public SegmentTreeNode(int start, int end) {
             this.start = start;
             this.end = end;
             left = null;
@@ -11,32 +11,28 @@ class NumArray {
             sum = 0;
         }
     }
-    Node root;
-    public NumArray(int[] nums) {
-        this.root = buildTree(nums, 0, nums.length - 1);
-    }
-    public Node buildTree(int[] nums, int start, int end) {
-        //base case
-        if(start > end) {
-            return null;
-        } else {
-            Node res = new Node(start, end);
-            if(start == end) res.sum = nums[start];
-            else {
-                int mid = start + (end - start) / 2;
-                res.left = buildTree(nums, start, mid);
-                res.right = buildTree(nums, mid + 1, end);
-                res.sum = res.left.sum + res.right.sum;
-            }
-            return res;
-        }
-    }
     
+    SegmentTreeNode root;
+    public NumArray(int[] nums) {
+        root = buildTree(nums, 0, nums.length - 1);
+    }
+    public SegmentTreeNode buildTree(int[] nums, int start, int end) {
+        if(start > end) return null;
+        SegmentTreeNode node = new SegmentTreeNode(start, end);
+        if(start == end) node.sum = nums[start];
+        else {
+            int mid = start + (end - start) / 2;
+            node.left = buildTree(nums, start, mid);
+            node.right = buildTree(nums, mid + 1, end);
+            node.sum = node.left.sum + node.right.sum;
+        }
+        return node;
+    }
     
     public void update(int index, int val) {
         update(root, index, val);
     }
-    public void update(Node root, int index, int val) {
+    public void update(SegmentTreeNode root, int index, int val) {
         if(root.start == root.end) {
             root.sum = val;
             return;
@@ -50,14 +46,16 @@ class NumArray {
     public int sumRange(int left, int right) {
         return sumRange(root, left, right);
     }
-    public int sumRange(Node root, int left, int right) {
+    public int sumRange(SegmentTreeNode root, int left, int right) {
         if(root.start == left && root.end == right) {
             return root.sum;
         }
         int mid = root.start + (root.end - root.start) / 2;
-        if(left >= mid + 1) return sumRange(root.right, left, right);
-        else if(right <= mid) return sumRange(root.left, left, right);
-        else {
+        if(right <= mid) {
+            return sumRange(root.left, left, right);
+        } else if(left >= mid + 1) {
+            return sumRange(root.right, left, right);
+        } else {
             return sumRange(root.left, left, mid) + sumRange(root.right, mid + 1, right);
         }
     }
