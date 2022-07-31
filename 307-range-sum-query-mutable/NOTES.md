@@ -1,43 +1,20 @@
-ret.left = buildTree(nums, start, mid);
-ret.right = buildTree(nums, mid + 1, end);
-ret.sum = ret.left.sum + ret.right.sum;
-}
-return ret;
-}
-}
-void update(int i, int val) {
-update(root, i, val);
-}
-void update(SegmentTreeNode root, int pos, int val) {
-if (root.start == root.end) {
-root.sum = val;
-} else {
-int mid = root.start + (root.end - root.start) / 2;
-if (pos <= mid) {
-update(root.left, pos, val);
-} else {
-update(root.right, pos, val);
-}
-root.sum = root.left.sum + root.right.sum;
-}
-}
-​
-public int sumRange(int i, int j) {
-return sumRange(root, i, j);
-}
-public int sumRange(SegmentTreeNode root, int start, int end) {
-if (root.end == end && root.start == start) {
-return root.sum;
-} else {
-int mid = root.start + (root.end - root.start) / 2;
-if (end <= mid) {
-return sumRange(root.left, start, end);
-} else if (start >= mid+1) {
-return sumRange(root.right, start, end);
-}  else {
-return sumRange(root.right, mid+1, end) + sumRange(root.left, start, mid);
-}
-}
-}
-}
+方法一： BIT- binary index tree解法->https://leetcode.cn/problems/range-sum-query-mutable/solution/-by-hu-ge-8-t4rn/ 图解
+PYTHON SOLTUION
 ```
+class BIT:
+def __init__(self, size):
+self.sums = [0]*(size + 1)
+def lowbit(self, x):
+return x & (-x)
+def getSum(self, i):
+s = 0
+while i > 0:
+s += self.sums[i]
+i -= self.lowbit(i)
+return s
+def getSumRange(self, l, r):
+return self.getSum(r) - self.getSum(l - 1)
+def insert(self, i, val):
+while i < len(self.sums):
+self.sums[i] += val
+i += self.lowbit(i)
