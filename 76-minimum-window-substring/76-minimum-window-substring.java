@@ -1,11 +1,9 @@
 class Solution {
     public String minWindow(String s, String t) {
-        Map<Character, Integer>  freq = new HashMap<>();
-        for(char c : t.toCharArray()) {
-            freq.put(c, freq.getOrDefault(c, 0) + 1);
-        }
-        int l = 0, minStart = 0, minLen = Integer.MAX_VALUE;
-        int cnt = t.length();
+        Map<Character, Integer> freq = new HashMap<>();
+        for(char c : t.toCharArray()) freq.put(c, freq.getOrDefault(c, 0) + 1);
+        int l = 0;
+        int cnt = t.length(), minStart = 0, minLen = Integer.MAX_VALUE;
         for(int i = 0; i < s.length(); i++) {
             char c1 = s.charAt(i);
             if(freq.containsKey(c1)) {
@@ -24,6 +22,7 @@ class Solution {
                 }
                 l++;
             }
+            
         }
         if(minLen == Integer.MAX_VALUE) return "";
         return s.substring(minStart, minStart + minLen);
