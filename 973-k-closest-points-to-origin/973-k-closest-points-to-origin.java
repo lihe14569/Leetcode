@@ -1,20 +1,16 @@
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
-        int[][] res = new int[k][2];
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> distance(b) - distance(a));
-        for(int[] p : points) {
-            pq.offer(p);
-            if(pq.size() > k) {
-                pq.poll();
+        Comparator<int[]> cmp = new Comparator<>() {
+            @Override
+            public int compare(int[] p1, int[] p2) {
+                long dis1 = p1[0] * p1[0] + p1[1] * p1[1];
+                long dis2 = p2[0] * p2[0] + p2[1] * p2[1];
+                if(dis1 == dis2) return 0;
+                else if(dis1 < dis2) return -1;
+                else return 1;
             }
-        }
-        int i = 0;
-        while(!pq.isEmpty()) {
-            res[i++] = pq.poll();
-        }
-        return res;
-    }
-    public int distance(int[] p) {
-        return p[0] * p[0] + p[1] * p[1];
+        };
+        Arrays.sort(points, cmp);
+        return Arrays.copyOf(points, k);
     }
 }
