@@ -1,16 +1,38 @@
 class Solution {
-    String generate(int a, int b, int c, String aa, String bb, String cc) {
-    if (a < b)
-        return generate(b, a, c, bb, aa, cc);
-    if (b < c)
-        return generate(a, c, b, aa, cc, bb);
-    if (b == 0)
-        return aa.repeat(Math.min(2, a));
-    int use_a = Math.min(2, a), use_b = a - use_a >= b ? 1 : 0; 
-    return aa.repeat(use_a) + bb.repeat(use_b) +
-        generate(a - use_a, b - use_b, c, aa, bb, cc);    
+    class Pair {
+        char c;
+        int val;
+        public Pair(char c, int val) {
+            this.c = c;
+            this.val = val;
+        }
     }
     public String longestDiverseString(int a, int b, int c) {
-        return generate(a, b, c, "a", "b", "c");
+        PriorityQueue<Pair> pq = new PriorityQueue<>((x, y) -> y.val - x.val);
+        if(a > 0) pq.offer(new Pair('a', a));
+        if(b > 0) pq.offer(new Pair('b', b));
+        if(c > 0) pq.offer(new Pair('c', c));
+        
+        StringBuilder sb = new StringBuilder();
+        while(!pq.isEmpty()) {
+            Pair first = pq.poll();
+            for(int i = 0; i < 2 && first.val > 0; i++) {
+                sb.append(first.c);
+                first.val--;
+            }
+            if(pq.isEmpty()) break;
+            Pair second = pq.poll();
+            if(second.val > 1 && second.val > first.val) {
+                sb.append(second.c);
+                sb.append(second.c);
+                second.val -= 2;
+            } else if(second.val > 0) {
+                sb.append(second.c);
+                second.val--;
+            }
+            if(first.val > 0) pq.offer(first);
+            if(second.val > 0) pq.offer(second);
+        }
+        return sb.toString();
     }
 }
