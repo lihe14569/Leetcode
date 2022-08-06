@@ -1,19 +1,33 @@
 class Solution {
     public int minDeletions(String s) {
-        int[] freq = new int[26];
-        for(char c : s.toCharArray()) {
-            freq[c - 'a']++;
+        // Store the frequency of each character
+        int[] frequency = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            frequency[s.charAt(i) - 'a']++;
         }
-        Arrays.sort(freq);
-        int cnt = 0;
-        int maxAllowedFreq = s.length();
-        for(int i = 25; i >= 0 && freq[i] > 0; i--) {
-            if(freq[i] > maxAllowedFreq) {
-                cnt += freq[i] - maxAllowedFreq;
-                freq[i] = maxAllowedFreq;
+        
+        // Add the frequencies to the priority queue
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for (int i = 0; i < 26; i++) {
+            if (frequency[i] > 0) {
+                pq.add(frequency[i]);
             }
-            maxAllowedFreq = Math.max(0, freq[i] - 1);
         }
-        return cnt;
+        
+        int deleteCount = 0;
+        while (pq.size() > 1) {
+            int topElement  = pq.remove();
+            
+            // If the top two elements in the priority queue are the same
+            if (topElement == pq.peek()) {
+                // Decrement the popped value and push it back into the queue
+                if (topElement - 1 > 0) {
+                    pq.add(topElement - 1);
+                }
+                deleteCount++;
+            }
+        }
+        
+        return deleteCount;
     }
 }
