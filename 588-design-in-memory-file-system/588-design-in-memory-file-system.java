@@ -1,46 +1,47 @@
 class FileSystem {
     class File {
-        //field
-        Map<String, File> files;
         String content;
         boolean isFile;
-        
-        //constructor
+        Map<String, File> files;
         public File() {
-            files = new HashMap<>();
             content = "";
             isFile = false;
+            files = new HashMap<>();
         }
     }
+    
     File root;
     public FileSystem() {
-        root = new File();
+        root = new File();        
     }
     
     public List<String> ls(String path) {
         List<String> list = new ArrayList<>();
-        String[] route = path.split("/");
-        File curr = root;
-        for(int i = 1; i < route.length; i++) {
-            curr = curr.files.get(route[i]);
+        File f = root;
+        String[] pathArr = path.split("/");
+        for(int i = 1; i < pathArr.length; i++) {
+            if(!f.files.containsKey(pathArr[i])) {
+                f.files.put(pathArr[i], new File());
+            }
+            f = f.files.get(pathArr[i]);
         }
-        if(curr.isFile) {
-            list.add(route[route.length - 1]);
+        if(f.isFile) {
+            list.add(pathArr[pathArr.length - 1]);
             return list;
         }
-        list.addAll(curr.files.keySet());
+        list.addAll(f.files.keySet());
         Collections.sort(list);
         return list;
     }
     
     public void mkdir(String path) {
-        File file = root;
+        File f = root;
         String[] route = path.split("/");
         for(int i = 1; i < route.length; i++) {
-            if(!file.files.containsKey(route[i])) {
-                file.files.put(route[i], new File());
+            if(!f.files.containsKey(route[i])) {
+                f.files.put(route[i], new File());
             }
-            file = file.files.get(route[i]);
+            f = f.files.get(route[i]);
         }
         
     }
