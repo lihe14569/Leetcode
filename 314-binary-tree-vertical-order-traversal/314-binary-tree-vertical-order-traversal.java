@@ -15,42 +15,41 @@
  */
 class Solution {
     public List<List<Integer>> verticalOrder(TreeNode root) {
-        //bfs
         List<List<Integer>> res = new ArrayList<>();
         if(root == null) return res;
-        Queue<TreeNode> q = new LinkedList<>();
-        q.offer(root);
-        Map<TreeNode, Integer> nodeToCol = new HashMap<>();
-        Map<Integer, List<Integer>> colToNodes = new HashMap<>();
-        nodeToCol.put(root, 0);
-        int minC = 0, maxC = 0;
-        
+        int left = 0, right = 0;
+        //bfs
+        Map<Integer, List<Integer>> verticalOrder = new HashMap<>();
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(root, 0));
         while(!q.isEmpty()) {
-            int size=  q.size();
-            for(int i = 0; i < size; i++) {
-                TreeNode node = q.poll();
-                int col = nodeToCol.get(node);
-                List<Integer> currCol = colToNodes.getOrDefault(col, new ArrayList<>());
-                currCol.add(node.val);
-                colToNodes.put(col, currCol);
-                if(node.left != null) {
-                    q.offer(node.left);
-                    nodeToCol.put(node.left, col - 1);
-                    minC = Math.min(minC, col - 1);
-                }
-                if(node.right != null) {
-                    q.offer(node.right);
-                    nodeToCol.put(node.right, col + 1);
-                    maxC = Math.max(maxC, col + 1);
-                }
+            int size = q.size();
+            for(int i =0; i < size; i++) {
+                Pair node = q.poll();
+                TreeNode curr = node.node;
+                int currPos = node.pos;
+                if(!verticalOrder.containsKey(currPos)) 
+                    verticalOrder.put(currPos, new ArrayList<>());
+                verticalOrder.get(currPos).add(curr.val);
+                if(curr.left != null) q.offer(new Pair(curr.left, currPos - 1));
+                if(curr.right != null) q.offer(new Pair(curr.right, currPos + 1));
+                left = Math.min(left, currPos - 1);
+                right = Math.max(right, currPos + 1);
             }
         }
-        for(int i = minC; i <= maxC; i++) {
-            if(colToNodes.containsKey(i)) {
-                res.add(colToNodes.get(i));
-            }
+        
+        for(int i = left; i <= right; i++) {
+            List<Integer> lst = verticalOrder.get(i);
+            if(lst != null) res.add(lst);
         }
         return res;
-        
+    }
+    class Pair {
+        TreeNode node;
+        int pos;
+        public Pair(TreeNode node, int pos) {
+            this.node = node;
+            this.pos = pos;
+        }
     }
 }
