@@ -1,22 +1,21 @@
 class Solution {
     public int smallestDistancePair(int[] nums, int k) {
-        //sort
         Arrays.sort(nums);
-        int N = nums[nums.length - 1];
-        
-        int n = nums.length;
-        int[] buckets = new int[N + 1];
-        
-        //put all pairs and its distance into buckets
-        for(int i = 0; i < n; i++) {
-            for(int j = i + 1; j < n; j++) {
-                buckets[nums[j] - nums[i]]++;
-            }
+        int l = 0, r = nums[nums.length - 1];
+        while(l < r) {
+            int mid = l + (r - l) / 2;
+            if(count(nums, mid) >= k) r = mid;
+            else l = mid + 1;
         }
-        for(int i = 0; i <= N; i++) {
-            k -= buckets[i];
-            if(k <= 0) return i;
+        return l;
+    }
+    public int count(int[] nums, int target) {
+        int res = 0;
+        int l = 0;
+        for(int i = 0; i < nums.length; i++) {
+            while(l < i && nums[i] - nums[l] > target) l++;
+            res += i - l;
         }
-        return 0;
+        return res;
     }
 }
