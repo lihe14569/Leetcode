@@ -1,30 +1,38 @@
 class Solution {
     public int maximalRectangle(char[][] matrix) {
         int m = matrix.length, n = matrix[0].length;
-        int[]dp = new int[n]; //indicates ith row longest consecutive block
-        int maxArea = 0;
+        int[][] dp = new int[m][n];
+        
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
-                dp[j] = matrix[i][j] == '1' ? dp[j] + 1 : 0;
+                if(matrix[i][j] == '1') {
+                    if(i > 0) dp[i][j] = dp[i - 1][j] + 1;
+                    else dp[i][j] = 1;
+                }
             }
-            maxArea = Math.max(maxArea, findLargestRec(dp));
         }
-        return maxArea;
+        int res = 0;
+        for(int i = 0; i < m; i++)  res = Math.max(res, findLargestRectangle(dp[i]));
+        return res;
     }
-    public int findLargestRec(int[] dp) {
-        int n = dp.length;
+    public int findLargestRectangle(int[] h) {
+        int n = h.length;
         Stack<Integer> stack = new Stack<>();
         stack.push(-1);
-        int res = 0;
+        int max = 0;
         for(int i = 0; i < n; i++) {
-            while(stack.peek() != -1 && dp[i] <= dp[stack.peek()]) {
-                res = Math.max(res, dp[stack.pop()] * (i - stack.peek() - 1));
+            while(stack.peek() != -1 && h[stack.peek()] > h[i]) {
+                int hi = h[stack.pop()];
+                int w = i - stack.peek() - 1;
+                max = Math.max(max, w * hi);
             }
             stack.push(i);
         }
         while(stack.peek() != -1) {
-            res = Math.max(res, dp[stack.pop()] * (n - stack.peek() - 1));
+            int hi = h[stack.pop()];
+            int w = n - stack.peek() - 1;
+            max = Math.max(max, w * hi);
         }
-        return res;
+        return max;
     }
 }
