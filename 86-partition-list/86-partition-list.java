@@ -10,23 +10,23 @@
  */
 class Solution {
     public ListNode partition(ListNode head, int x) {
-        ListNode beforeHead = new ListNode(-1);
-        ListNode prev = beforeHead;
-        ListNode afterHead = new ListNode(-1);
-        ListNode after = afterHead;
+        ListNode before = new ListNode(-1);
+        ListNode after = new ListNode(-1);
+        
+        ListNode pa = before, pb = after;
         ListNode curr = head;
         while(curr != null) {
             if(curr.val < x) {
-                prev.next = curr;
-                prev = curr;
+                pa.next = curr;
+                pa = curr;
             } else {
-                after.next = curr;
-                after = curr;
+                pb.next = curr;
+                pb = curr;
             }
             curr = curr.next;
         }
-        after.next = null;
-        prev.next = afterHead.next;
-        return beforeHead.next;
+        pa.next = after.next;
+        pb.next = null;
+        return before.next;
     }
 }
