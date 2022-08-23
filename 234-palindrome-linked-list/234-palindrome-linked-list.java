@@ -11,29 +11,24 @@
 class Solution {
     public boolean isPalindrome(ListNode head) {
         if(head == null || head.next == null) return true;
-        ListNode slow = head, fast = slow.next;
-        while(fast != null && fast.next != null) {
-            slow = slow.next;
-            fast= fast.next.next;
+        Stack<ListNode> stack = new Stack<>();
+        ListNode f = head, s = head;
+        while(s != null && s.next != null) {
+            s = s.next.next;
+            f = f.next;
         }
-        ListNode mid = slow.next;
-        slow.next = null;
-        fast = reverse(mid);
-        slow = head;
-        while(fast != null) {
-            if(fast.val != slow.val)
-                return false;
-            slow = slow.next;
-            fast= fast.next;
+        if(s != null) f = f.next;
+        
+        while(f != null) {
+            stack.push(f);
+            f = f.next;
+        }
+        s = head;
+        while(!stack.isEmpty()) {
+            if(s.val != stack.peek().val) return false;
+            s = s.next;
+            stack.pop();
         }
         return true;
-    }
-    public ListNode reverse(ListNode head) {
-        if(head == null || head.next == null) return head;
-        ListNode next =  head.next;
-        ListNode newHead = reverse(next);
-        next.next = head;
-        head.next = null;
-        return newHead;
     }
 }
