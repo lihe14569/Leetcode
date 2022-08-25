@@ -4,9 +4,11 @@ class Solution {
         
         int[][] res = new int[r][c];
         if(r * c != m *n) return mat;
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j <n; j++){
-                res[(i * n + j) / c][(i * n + j) % c] = mat[i][j];
+        int idx = 0;
+        for(int i = 0; i < r; i++) {
+            for(int j = 0; j < c; j++){
+                res[i][j] = mat[idx / n][idx % n];
+                idx++;
             }
         }
         return res;
