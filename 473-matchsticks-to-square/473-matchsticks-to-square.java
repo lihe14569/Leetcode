@@ -1,61 +1,36 @@
-import java.util.HashMap;
-import java.util.Collections;
-
 class Solution {
-    public List<Integer> nums;
-    public int[] sums;
-    public int possibleSquareSide;
-
-    public Solution() {
-        this.sums = new int[4];
-    }
-
-    // Depth First Search function.
-    public boolean dfs(int index) {
-
-        // If we have exhausted all our matchsticks, check if all sides of the square are of equal length
-        if (index == this.nums.size()) {
-            return sums[0] == sums[1] && sums[1] == sums[2] && sums[2] == sums[3];
+    int[] ms;
+    int n;
+    boolean[] seen;
+    public boolean makesquare(int[] matchsticks) {
+        n = matchsticks.length;
+        ms = matchsticks;
+        Arrays.sort(ms);
+        for(int i = 0, j = n - 1; i < j; i++, j--) {
+            int temp = ms[i];
+            ms[i] = ms[j];
+            ms[j] = temp;
         }
-
-        // Get current matchstick.
-        int element = this.nums.get(index);
-
-        // Try adding it to each of the 4 sides (if possible)
-        for(int i = 0; i < 4; i++) {
-            if (this.sums[i] + element <= this.possibleSquareSide) {
-                this.sums[i] += element;
-                if (this.dfs(index + 1)) {
-                    return true;
-                }
-                this.sums[i] -= element;
+        int sum = 0;
+        for(int num : ms) sum += num;
+        if(sum % 4 != 0) return false;
+        sum /= 4;
+        seen = new boolean[n];
+        return dfs(0, 0, sum, 0);
+    }
+    public boolean dfs(int start, int currLen, int length, int count) {
+        if(count == 3) return true;
+        if(currLen == length) return dfs(0, 0, length, count + 1);
+        for(int i = 0; i < n; i++) {
+            if(seen[i]) continue;
+            if(currLen + ms[i] <= length) {
+                seen[i] = true;
+                if(dfs(start + 1, currLen + ms[i], length, count)) return true;
+                seen[i] = false;
             }
+            if(currLen == 0 || currLen + ms[i] == length) return false;
+            while(i + 1 < n && ms[i + 1] == ms[i]) i++;
         }
-
         return false;
-    }
-
-    public boolean makesquare(int[] nums) {
-        // Empty matchsticks.
-        if (nums == null || nums.length == 0) {
-            return false;
-        }
-
-        // Find the perimeter of the square (if at all possible)
-        int L = nums.length;
-        int perimeter = 0;
-        for(int i = 0; i < L; i++) {
-            perimeter += nums[i];
-        }
-
-        this.possibleSquareSide =  perimeter / 4;
-        if (this.possibleSquareSide * 4 != perimeter) {
-            return false;
-        }
-
-        // Convert the array of primitive int to ArrayList (for sorting).
-        this.nums = Arrays.stream(nums).boxed().collect(Collectors.toList());
-        Collections.sort(this.nums, Collections.reverseOrder());
-        return this.dfs(0);
     }
 }
