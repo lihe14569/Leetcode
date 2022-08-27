@@ -1,15 +1,19 @@
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        time = []
+        start = []
+        end = []
         for interval in intervals:
-            time.append((interval[0], 1))
-            time.append((interval[1], -1))
+            start.append(interval[0])
+            end.append(interval[1])
         
-        time.sort(key = lambda x : (x[0], x[1]))
+        start.sort()
+        end.sort()
         
-        cnt = 0
-        res = 0
-        for t in time:
-            cnt += t[1]
-            res = max(res, cnt)
-        return res
+        room = 0
+        endIdx = 0
+        for i in range(len(start)):
+            if start[i] < end[endIdx]:
+                room += 1
+            else:
+                endIdx += 1
+        return room
