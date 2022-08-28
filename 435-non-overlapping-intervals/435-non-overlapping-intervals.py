@@ -1,14 +1,13 @@
 class Solution:
     def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
-        #greed
-        intervals.sort(key=lambda x: x[1])
-        
-        cnt = 1;
-        prev= intervals[0][1]
-        for curr in intervals[1:]:
-            if curr[0] < prev:
-                continue
-            else:
+        intervals.sort(key = lambda x : (x[1], -x[0]))
+        prev = intervals[0]
+        cnt = 0
+        for i in intervals[1:]:
+            if i[0] < prev[1]: #overlap
                 cnt += 1
-                prev= curr[1]
-        return len(intervals) - cnt
+            else:
+                prev = i
+        return cnt
+            
+        
