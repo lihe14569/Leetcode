@@ -15,15 +15,14 @@ class Interval {
 
 class Solution {
     public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
-        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.start, b.start));
-        //put all interval in pq
-        for(List<Interval> lst : schedule) {
-            for(Interval i : lst) {
+        List<Interval> res = new ArrayList<>();
+        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> a.start == b.start ? b.end - a.end : a.start - b.start);
+        for(List<Interval> p : schedule) {
+            for(Interval i : p) {
                 pq.offer(i);
             }
         }
         Interval curr = pq.poll();
-        List<Interval> res = new ArrayList<>();
         while(!pq.isEmpty()) {
             if(curr.end >=  pq.peek().start) {
                 curr.end = Math.max(curr.end, pq.poll().end);
@@ -32,6 +31,7 @@ class Solution {
                 curr = pq.poll();
             }
         }
+       
         return res;
     }
 }
