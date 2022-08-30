@@ -4,13 +4,13 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
         n = len(matrix)
+        #transpose
         for i in range(n):
-            for j in range(i, n):
+            for j in range(i):
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
         
+        #vertical flip
         for i in range(n):
             for j in range(n // 2):
-                matrix[i][j], matrix[i][n - 1 - j] = matrix[i][n -1 - j], matrix[i][j]
+                matrix[i][j], matrix[i][n - j - 1] = matrix[i][n - j - 1], matrix[i][j]
         
-    
-                
