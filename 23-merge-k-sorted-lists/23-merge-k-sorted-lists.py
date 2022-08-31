@@ -5,41 +5,18 @@
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if  not lists: return None
         
-        if len(lists) == 1: return lists[0]
-        m = len(lists) //2
-        left, right = self.mergeKLists(lists[:m]), self.mergeKLists(lists[m:])
-        def merge(list1, list2):
-            if not list1: return list2
-            if not list2:return list1
-            dummy = curr = ListNode(0)
-            while list1 and list2:
-                if list1.val < list2.val:
-                    curr.next = list1
-                    list1 = list1.next
-                else:
-                    curr.next = list2
-                    list2 = list2.next
-                curr = curr.next
-            if list1: curr.next = list1
-            else: curr.next = list2
-            return dummy.next
-        return merge(left, right)
-    
-#     def merge(self, list1, list2):
-#             if not list1: return list2
-#             if not list2:return list1
-#             dummy = curr = ListNode(0)
-#             while list1 and list2:
-#                 if list1.val < list2.val:
-#                     curr.next = list1
-#                     list1 = list1.next
-#                 else:
-#                     curr.next = list2
-#                     list2 = list2.next
-#                 curr = curr.next
-#             if list1: curr.next = list1
-#             else: curr.next = list2
-#             return dummy.next
-    
+        ListNode.__lt__ =lambda self, other: self.val < other.val
+        dummy = curr =ListNode(0)
+        q = []
+        for node in lists:
+            if node:
+                heapq.heappush(q, node)
+        
+        while q:
+            node = heapq.heappop(q)
+            curr.next = node
+            curr =curr.next
+            if node and node.next:
+                heapq.heappush(q, node.next)
+        return dummy.next
