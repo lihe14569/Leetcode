@@ -24,6 +24,3 @@ inorder(root.right);
 ```
 ​
 iterative method
-```
-​
-```
