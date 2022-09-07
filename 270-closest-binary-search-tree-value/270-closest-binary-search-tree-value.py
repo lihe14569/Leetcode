@@ -6,16 +6,18 @@
 #         self.right = right
 class Solution:
     def closestValue(self, root: Optional[TreeNode], target: float) -> int:
-        inorder_lst = []
+        
+        stack = []
         diff = float('inf')
         res = 0
-        def inorder(root):
-            nonlocal inorder_lst, res, diff
-            if not root: return
-            inorder(root.left)
+        
+        while stack or root:
+            while root:
+                stack.append(root)
+                root =root.left
+            root = stack.pop()
             if abs(root.val - target) < diff:
                 res = root.val
-                diff = abs(root.val - target)
-            inorder(root.right)
-        inorder(root)
+                diff = abs(root.val - target) 
+            root = root.right
         return res
