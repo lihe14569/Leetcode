@@ -17,10 +17,10 @@ class Solution:
             print(prestart)
             root = TreeNode(preorder[prestart])
             if(prestart == preend): return root;
-            
+            #注意
             left_count = preorder_map[postorder[postend - 1]] - prestart - 1
-            if(left_count < 0):
-                left_count = 0
+            # if(left_count < 0):
+            #     left_count = 0
             root.left = buildTree(prestart + 1, prestart + left_count, poststart, poststart + left_count - 1)
             root.right = buildTree(prestart + left_count + 1, preend, poststart + left_count, postend - 1)
             return root
