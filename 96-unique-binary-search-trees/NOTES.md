@@ -20,3 +20,7 @@ return memo[end -start] = res;
 }
 }
 ```
+​
+method2: GO + Tabular
+```
+func numTrees(n int) int {
