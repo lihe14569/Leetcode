@@ -1,13 +1,3 @@
-int lmax = height[0], rmax = height[n - 1];
-int res = 0;
-while(l < r) {
-if(height[l] < height[r]) {
-if(height[l] < lmax) res += lmax - height[l];
-else lmax = height[l];
-l++;
-} else {
-if(height[r] < rmax) res += rmax - height[r];
-else rmax = height[r];
 r--;
 }
 }
@@ -49,3 +39,8 @@ if not stack:
 break
 h = min(height[i], height[stack[-1]])
 res += (i - stack[-1] - 1) * (h - height[l])
+stack.append(i)
+return res
+```
+​
+​
