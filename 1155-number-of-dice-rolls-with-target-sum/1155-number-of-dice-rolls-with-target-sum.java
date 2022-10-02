@@ -1,27 +1,18 @@
 class Solution {
-    final int MOD = 1000000007;
-    
-    int waysToTarget(Integer[][] memo, int diceIndex, int n, int currSum, int target, int k) {
-        // All the n dice are traversed, the sum must be equal to target for valid combination
-        if (diceIndex == n) {
-            return currSum == target ? 1 : 0;
-        }
-        
-        // We have already calculated the answer so no need to go into recursion
-        if (memo[diceIndex][currSum] != null) {
-            return memo[diceIndex][currSum];
-        }
-        
-        int ways = 0;
-        // Iterate over the possible face value for current dice
-        for (int i = 1; i <= Math.min(k, target - currSum); i++) {
-            ways = (ways + waysToTarget(memo, diceIndex + 1, n, currSum + i, target, k)) % MOD;
-        }
-        return memo[diceIndex][currSum] = ways;
-    }
-    
+    int MOD = 1000000007;
     public int numRollsToTarget(int n, int k, int target) {
         Integer[][] memo = new Integer[n + 1][target + 1];
-        return waysToTarget(memo, 0, n, 0, target, k);
+        return dfs(memo, 0, n, k, 0, target);
+    }
+    public int dfs(Integer[][] memo, int cnt, int n, int k, int currSum, int target) {
+        if(cnt == n) {
+            return currSum == target? 1 : 0;
+        }
+        if(memo[cnt][currSum] != null) return memo[cnt][currSum];
+        int res = 0;
+        for(int i = 1; i <= Math.min(target - currSum, k); i++) {
+            res = (res + dfs(memo, cnt + 1, n, k, currSum + i, target)) % MOD;
+        }
+        return memo[cnt][currSum] = res;
     }
 }
