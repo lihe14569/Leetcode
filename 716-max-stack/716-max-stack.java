@@ -49,7 +49,9 @@ class MaxStack {
         //get the node from map
         List<Node> lst = map.get(popVal);
         Node node = lst.remove(lst.size() - 1);
+        //update map key if key dont have map value
         if(lst.isEmpty()) map.remove(popVal);
+        //remove the node
         node.next.prev = node.prev;
         node.prev.next = node.next;
         return popVal;
