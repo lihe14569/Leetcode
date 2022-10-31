@@ -3,13 +3,12 @@ class Solution {
     public String reverseVowels(String s) {
         StringBuilder sb = new StringBuilder(s);
         int l = 0, r = s.length() - 1;
-        while(l <= r) {
-            while(l <= r && !vowels.contains(sb.charAt(l))) l++;
-            while(l <= r && !vowels.contains(sb.charAt(r))) r--;
-            if(l >= r) break;
-            swap(sb, l, r);
-            l++;
-            r--;
+        while(l < r) {
+            while(l < r && !vowels.contains(sb.charAt(l))) l++;
+            while(l < r && !vowels.contains(sb.charAt(r))) r--;
+            if(l <r) {
+                swap(sb, l++, r--);
+            }
         }
         return sb.toString();
     }
